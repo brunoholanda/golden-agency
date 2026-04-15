@@ -12,6 +12,10 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { privacyPolicyEn, privacyPolicyPtBR } from './content/privacyPolicy'
+import brandLogoUrl from './assets/logo-2.png'
+import teamPhotoHiani from './assets/team/hiani.png'
+import teamPhotoLeah from './assets/team/leah.png'
+import teamPhotoNay from './assets/team/nay.png'
 
 const { Header, Content, Footer } = Layout
 const { Title, Paragraph, Text } = Typography
@@ -237,17 +241,17 @@ const translations = {
       'Pessoas que tornam o atendimento da Golden Agencia acolhedor, humano e eficiente.',
     teamMembers: [
       {
-        image: '/src/assets/team/nay.webp',
+        image: teamPhotoNay,
         name: 'Nayara Guireli',
         role: 'Idealizadora do projeto',
       },
       {
-        image: '/src/assets/team/hiani.webp',
+        image: teamPhotoHiani,
         name: 'Hiani Karoliny',
         role: 'Agente Kansas City',
       },
       {
-        image: '/src/assets/team/leah.webp',
+        image: teamPhotoLeah,
         name: 'Leah',
         role: 'Assistente Virtual',
       },
@@ -460,17 +464,17 @@ const translations = {
       'The people who make Golden Agency support welcoming, human, and efficient.',
     teamMembers: [
       {
-        image: '/src/assets/team/nay.webp',
+        image: teamPhotoNay,
         name: 'Nayara Guireli',
         role: 'Project founder',
       },
       {
-        image: '/src/assets/team/hiani.webp',
+        image: teamPhotoHiani,
         name: 'Hiani Karoliny',
         role: 'Kansas City Agent',
       },
       {
-        image: '/src/assets/team/leah.webp',
+        image: teamPhotoLeah,
         name: 'Leah',
         role: 'Virtual Assistant',
       },
@@ -821,7 +825,7 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
           <Brand to="/">
             <BrandColumn>
               <BrandIdentity>
-                <BrandLogo src="/src/assets/logo-2.png" alt="Logo Golden Agencia" />
+                <BrandLogo src={brandLogoUrl} alt="Logo Golden Agencia" />
                 <BrandTitle>{t.siteName}</BrandTitle>
               </BrandIdentity>
               <HeaderSubtitle>{t.siteTagline}</HeaderSubtitle>
