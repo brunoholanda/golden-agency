@@ -12,10 +12,10 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { privacyPolicyEn, privacyPolicyPtBR } from './content/privacyPolicy'
-import brandLogoUrl from './assets/logo-2.png'
-import teamPhotoHiani from './assets/team/hiani.png'
-import teamPhotoLeah from './assets/team/leah.png'
-import teamPhotoNay from './assets/team/nay.png'
+import logo2Webp from './assets/logo-2.webp'
+import teamHianiWebp from './assets/team/hiani.webp'
+import teamLeahWebp from './assets/team/leah.webp'
+import teamNayWebp from './assets/team/nay.webp'
 
 const { Header, Content, Footer } = Layout
 const { Title, Paragraph, Text } = Typography
@@ -241,17 +241,17 @@ const translations = {
       'Pessoas que tornam o atendimento da Golden Agencia acolhedor, humano e eficiente.',
     teamMembers: [
       {
-        image: teamPhotoNay,
+        image: teamNayWebp,
         name: 'Nayara Guireli',
         role: 'Idealizadora do projeto',
       },
       {
-        image: teamPhotoHiani,
+        image: teamHianiWebp,
         name: 'Hiani Karoliny',
         role: 'Agente Kansas City',
       },
       {
-        image: teamPhotoLeah,
+        image: teamLeahWebp,
         name: 'Leah',
         role: 'Assistente Virtual',
       },
@@ -464,17 +464,17 @@ const translations = {
       'The people who make Golden Agency support welcoming, human, and efficient.',
     teamMembers: [
       {
-        image: teamPhotoNay,
+        image: teamNayWebp,
         name: 'Nayara Guireli',
         role: 'Project founder',
       },
       {
-        image: teamPhotoHiani,
+        image: teamHianiWebp,
         name: 'Hiani Karoliny',
         role: 'Kansas City Agent',
       },
       {
-        image: teamPhotoLeah,
+        image: teamLeahWebp,
         name: 'Leah',
         role: 'Virtual Assistant',
       },
@@ -825,7 +825,7 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
           <Brand to="/">
             <BrandColumn>
               <BrandIdentity>
-                <BrandLogo src={brandLogoUrl} alt="Logo Golden Agencia" />
+                <BrandLogo src={logo2Webp} alt="Logo Golden Agencia" />
                 <BrandTitle>{t.siteName}</BrandTitle>
               </BrandIdentity>
               <HeaderSubtitle>{t.siteTagline}</HeaderSubtitle>
