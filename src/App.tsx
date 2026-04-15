@@ -816,12 +816,6 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
     <PageLayout>
       <TopHeader>
         <HeaderTopRow>
-          <MobileMenuButton
-            type="text"
-            aria-label="Abrir menu"
-            icon={<MenuOutlined />}
-            onClick={() => setMobileMenuOpen(true)}
-          />
           <Brand to="/">
             <BrandColumn>
               <BrandIdentity>
@@ -831,38 +825,46 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
               <HeaderSubtitle>{t.siteTagline}</HeaderSubtitle>
             </BrandColumn>
           </Brand>
-          <TopActions>
-            <LanguageControl>
-              <Segmented
-                size="middle"
-                value={language}
-                options={[
-                  { label: 'PT-BR', value: 'pt-BR' },
-                  { label: 'EN', value: 'en' },
-                ]}
-                onChange={(value) => setLanguage(value as Language)}
-              />
-            </LanguageControl>
-            <Button
-              type="primary"
-              icon={<ArrowRightOutlined />}
-              aria-label={t.contactCta}
-              href={WHATSAPP_LINK}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t.contactCta}
-            </Button>
-            <Button
-              icon={<InstagramOutlined />}
-              aria-label="Instagram Golden Agencia"
-              href={INSTAGRAM_LINK}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Instagram
-            </Button>
-          </TopActions>
+          <HeaderActionsGroup>
+            <TopActions>
+              <LanguageControl>
+                <Segmented
+                  size="middle"
+                  value={language}
+                  options={[
+                    { label: 'PT-BR', value: 'pt-BR' },
+                    { label: 'EN', value: 'en' },
+                  ]}
+                  onChange={(value) => setLanguage(value as Language)}
+                />
+              </LanguageControl>
+              <HeaderContactButton
+                type="primary"
+                icon={<ArrowRightOutlined />}
+                aria-label={t.contactCta}
+                href={WHATSAPP_LINK}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t.contactCta}
+              </HeaderContactButton>
+              <HeaderInstagramButton
+                icon={<InstagramOutlined />}
+                aria-label="Instagram Golden Agencia"
+                href={INSTAGRAM_LINK}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <InstagramHeaderLabel>{t.instagramLabel}</InstagramHeaderLabel>
+              </HeaderInstagramButton>
+            </TopActions>
+            <MobileMenuButton
+              type="text"
+              aria-label="Abrir menu"
+              icon={<MenuOutlined />}
+              onClick={() => setMobileMenuOpen(true)}
+            />
+          </HeaderActionsGroup>
         </HeaderTopRow>
         <NavList>
           {navigationItems.map((item) => (
@@ -991,16 +993,32 @@ const TopHeader = styled(Header)`
 
 const HeaderTopRow = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
+  row-gap: 10px;
   flex-wrap: wrap;
+`
+
+const HeaderActionsGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 1 auto;
+  min-width: 0;
+
+  @media (min-width: 901px) {
+    flex-wrap: nowrap;
+  }
 `
 
 const Brand = styled(NavLink)`
   text-decoration: none;
-  flex: 1;
+  flex: 1 1 200px;
   min-width: 0;
+  max-width: 100%;
 `
 
 const BrandColumn = styled.div`
@@ -1029,9 +1047,11 @@ const BrandLogo = styled.img`
 const BrandTitle = styled.h1`
   margin: 0;
   font-size: clamp(1rem, 3.0vw, 1.2rem);
-  line-height: 1;
+  line-height: 1.15;
   margin-top: 30px;
   color: #ffffff;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 `
 
 const HeaderSubtitle = styled.p`
@@ -1039,10 +1059,13 @@ const HeaderSubtitle = styled.p`
   padding: 0;
   margin-top: 0;
   margin-bottom: 0;
-  line-height: 1.2;
+  line-height: 1.25;
   color: #ffffff;
-  font-size: 0.95rem;
-  opacity: 0.80;
+  font-size: clamp(0.78rem, 2.4vw, 0.95rem);
+  opacity: 0.8;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
 `
 
 const NavList = styled.ul`
@@ -1082,8 +1105,30 @@ const MenuLink = styled(NavLink)`
 const TopActions = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
+  justify-content: flex-end;
+  min-width: 0;
+  flex: 1 1 auto;
+`
+
+const HeaderContactButton = styled(Button)`
+  && {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+`
+
+const HeaderInstagramButton = styled(Button)`
+  && {
+    flex-shrink: 0;
+  }
+`
+
+const InstagramHeaderLabel = styled.span`
+  @media (max-width: 900px) {
+    display: none;
+  }
 `
 
 const MobileMenuButton = styled(Button)`
@@ -1141,6 +1186,7 @@ const LanguageControl = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 `
 
 const MainContent = styled(Content)`
