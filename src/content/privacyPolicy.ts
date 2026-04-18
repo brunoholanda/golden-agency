@@ -11,96 +11,96 @@ export type PrivacyPageContent = {
 }
 
 export const privacyPolicyPtBR: PrivacyPageContent = {
-  title: 'Politica de Privacidade',
-  lastUpdated: 'Ultima atualizacao: 15 de abril de 2026.',
+  title: 'Política de Privacidade',
+  lastUpdated: 'Última atualização: 15 de abril de 2026.',
   intro:
-    'A Golden Agencia ("nos", "nosso" ou "empresa") respeita sua privacidade. Esta Politica descreve como tratamos informacoes quando voce utiliza nosso site, entra em contato por canais digitais ou contrata servicos de apoio administrativo e correlatos para imigrantes e comunidade brasileira nos Estados Unidos.',
+    'A Golden Agência ("nós", "nosso" ou "empresa") respeita sua privacidade. Esta Política descreve como tratamos informações quando você utiliza nosso site, entra em contato por canais digitais ou contrata serviços de apoio administrativo e correlatos para imigrantes e comunidade brasileira nos Estados Unidos.',
   sections: [
     {
       title: '1. Quem somos',
       paragraphs: [
-        'Golden Agencia e um servico de apoio e despachante para demandas do dia a dia (documentos, agendamentos, comunicacao com terceiros, orientacao e assistencia virtual), voltado principalmente a brasileiros residentes nos EUA.',
-        'Para questoes sobre esta politica ou sobre seus dados: leah@goldenagencia.com ou (913) 257-7256.',
+        'Golden Agência é um serviço de apoio e despachante para demandas do dia a dia (documentos, agendamentos, comunicação com terceiros, orientação e assistência virtual), voltado principalmente a brasileiros residentes nos EUA.',
+        'Para questões sobre esta política ou sobre seus dados: leah@goldenagencia.com ou (913) 257-7256.',
       ],
     },
     {
-      title: '2. Informacoes que podemos coletar',
+      title: '2. Informações que podemos coletar',
       paragraphs: [
-        'Dados de contato e identificacao: nome, e-mail, telefone, cidade/regiao quando voce nos envia mensagem, preenche formulario no site ou conversa por WhatsApp, Instagram ou outros canais oficiais.',
-        'Conteudo das solicitacoes: descricao do servico desejado, documentos ou informacoes que voce voluntariamente compartilhar para que possamos prestar o atendimento (por exemplo copias, dados para agendamentos ou formularios).',
-        'Dados tecnicos do site: endereco IP, tipo de navegador, paginas visitadas, data/hora de acesso e eventuais cookies ou tecnologias similares usadas para funcionamento basico ou metricas anonimas, conforme configuracao do seu navegador e do nosso provedor de hospedagem.',
+        'Dados de contato e identificação: nome, e-mail, telefone, cidade/região quando você nos envia mensagem, preenche formulário no site ou conversa por WhatsApp, Instagram ou outros canais oficiais.',
+        'Conteúdo das solicitações: descrição do serviço desejado, documentos ou informações que você voluntariamente compartilhar para que possamos prestar o atendimento (por exemplo cópias, dados para agendamentos ou formulários).',
+        'Dados técnicos do site: endereço IP, tipo de navegador, páginas visitadas, data/hora de acesso e eventuais cookies ou tecnologias similares usadas para funcionamento básico ou métricas anônimas, conforme configuração do seu navegador e do nosso provedor de hospedagem.',
       ],
     },
     {
       title: '3. Finalidades do uso dos dados',
       paragraphs: [
-        'Responder solicitacoes, orcamentos e duvidas; prestar e gerir os servicos contratados; comunicar sobre o andamento do atendimento;',
-        'Cumprir obrigacoes legais aplicaveis; proteger direitos e seguranca da empresa e de clientes; melhorar a experiencia do site de forma agregada.',
-        'Nao vendemos sua lista de contatos nem utilizamos seus dados para fins compativeis com esta politica sem base legal adequada ou, quando exigido, sem seu consentimento.',
+        'Responder solicitações, orçamentos e dúvidas; prestar e gerir os serviços contratados; comunicar sobre o andamento do atendimento;',
+        'Cumprir obrigações legais aplicáveis; proteger direitos e segurança da empresa e de clientes; melhorar a experiência do site de forma agregada.',
+        'Não vendemos sua lista de contatos nem utilizamos seus dados para fins compatíveis com esta política sem base legal adequada ou, quando exigido, sem seu consentimento.',
       ],
     },
     {
       title: '4. Base legal e consentimento',
       paragraphs: [
-        'O tratamento pode fundamentar-se na execucao de medidas pre-contratuais ou contratuais, no legitimo interesse em prestar suporte seguro e eficiente, no cumprimento de obrigacao legal ou no consentimento, conforme o caso e a legislacao aplicavel (incluindo referencias gerais a leis de privacidade nos EUA, como leis estaduais de consumidor, quando pertinentes).',
-        'Quando o tratamento depender de consentimento (por exemplo comunicacoes de marketing nao essenciais), voce podera retira-lo a qualquer momento sem prejuizo da licitude do tratamento anterior.',
+        'O tratamento pode fundamentar-se na execução de medidas pré-contratuais ou contratuais, no legítimo interesse em prestar suporte seguro e eficiente, no cumprimento de obrigação legal ou no consentimento, conforme o caso e a legislação aplicável (incluindo referências gerais a leis de privacidade nos EUA, como leis estaduais de consumidor, quando pertinentes).',
+        'Quando o tratamento depender de consentimento (por exemplo comunicações de marketing não essenciais), você poderá retirá-lo a qualquer momento sem prejuízo da licitude do tratamento anterior.',
       ],
     },
     {
       title: '5. Compartilhamento com terceiros',
       paragraphs: [
-        'Podemos compartilhar dados apenas na medida necessaria com: prestadores de hospedagem e infraestrutura do site; ferramentas de comunicacao que voce utilizar (ex.: Meta/WhatsApp/Instagram) segundo as politicas dessas plataformas;',
-        'Autoridades, quando exigido por lei ou ordem judicial; parceiros operacionais estritamente necessarios ao servico solicitado por voce, mediante orientacao e minimizacao de dados.',
-        'Nao comercializamos bases de dados pessoais. Qualquer encaminhamento a contador, advogado ou outro profissional ocorrera apenas com sua ciencia ou solicitacao, salvo obrigacao legal.',
+        'Podemos compartilhar dados apenas na medida necessária com: prestadores de hospedagem e infraestrutura do site; ferramentas de comunicação que você utilizar (ex.: Meta/WhatsApp/Instagram) segundo as políticas dessas plataformas;',
+        'Autoridades, quando exigido por lei ou ordem judicial; parceiros operacionais estritamente necessários ao serviço solicitado por você, mediante orientação e minimização de dados.',
+        'Não comercializamos bases de dados pessoais. Qualquer encaminhamento a contador, advogado ou outro profissional ocorrerá apenas com sua ciência ou solicitação, salvo obrigação legal.',
       ],
     },
     {
-      title: '6. Transferencia internacional e local de armazenamento',
+      title: '6. Transferência internacional e local de armazenamento',
       paragraphs: [
-        'Como atuamos nos Estados Unidos e atendemos brasileiros na regiao, seus dados podem ser processados e armazenados nos EUA ou em servicos em nuvem com servidores nesse pais ou em outros paises onde o provedor opere, sempre observando medidas contratuais e de seguranca razoaveis.',
+        'Como atuamos nos Estados Unidos e atendemos brasileiros na região, seus dados podem ser processados e armazenados nos EUA ou em serviços em nuvem com servidores nesse país ou em outros países onde o provedor opere, sempre observando medidas contratuais e de segurança razoáveis.',
       ],
     },
     {
-      title: '7. Retencao',
+      title: '7. Retenção',
       paragraphs: [
-        'Mantemos informacoes pelo tempo necessario para cumprir as finalidades desta politica, resguardar direitos em eventual disputa e atender prazos legais ou regulamentares. Apos isso, podemos anonimizar ou eliminar os dados, salvo excecao legal de guarda.',
+        'Mantemos informações pelo tempo necessário para cumprir as finalidades desta política, resguardar direitos em eventual disputa e atender prazos legais ou regulamentares. Após isso, podemos anonimizar ou eliminar os dados, salvo exceção legal de guarda.',
       ],
     },
     {
       title: '8. Seus direitos',
       paragraphs: [
-        'Dependendo de onde voce reside, podem aplicar-se direitos de acesso, correcao, exclusao, portabilidade, oposicao a certos usos ou nao discriminacao por exercicio de direitos de privacidade.',
-        'Para exercer direitos ou esclarecimentos, entre em contato pelos canais indicados na secao 1. Responderemos no prazo razoavel permitido pela lei aplicavel.',
+        'Dependendo de onde você reside, podem aplicar-se direitos de acesso, correção, exclusão, portabilidade, oposição a certos usos ou não discriminação por exercício de direitos de privacidade.',
+        'Para exercer direitos ou esclarecimentos, entre em contato pelos canais indicados na seção 1. Responderemos no prazo razoável permitido pela lei aplicável.',
       ],
     },
     {
-      title: '9. Criancas e adolescentes',
+      title: '9. Crianças e adolescentes',
       paragraphs: [
-        'Nossos servicos nao sao direcionados a menores de 13 anos. Nao coletamos intencionalmente dados de criancas. Se tomar conhecimento de coleta inadvertida, tomaremos medidas para excluir tais informacoes.',
+        'Nossos serviços não são direcionados a menores de 13 anos. Não coletamos intencionalmente dados de crianças. Se tomar conhecimento de coleta inadvertida, tomaremos medidas para excluir tais informações.',
       ],
     },
     {
       title: '10. Cookies e tecnologias do navegador',
       paragraphs: [
-        'O site pode usar cookies ou armazenamento local estritamente necessario ao funcionamento ou para estatisticas basicas. Voce pode gerenciar cookies nas configuracoes do navegador. O bloqueio total pode afetar algumas funcionalidades.',
+        'O site pode usar cookies ou armazenamento local estritamente necessário ao funcionamento ou para estatísticas básicas. Você pode gerenciar cookies nas configurações do navegador. O bloqueio total pode afetar algumas funcionalidades.',
       ],
     },
     {
-      title: '11. Seguranca',
+      title: '11. Segurança',
       paragraphs: [
-        'Adotamos medidas tecnicas e organizacionais razoaveis para proteger dados contra acesso nao autorizado, perda ou alteracao. Nenhum sistema e 100% seguro; recomendamos nao enviar dados sensiveis desnecessarios e usar canais oficiais da Golden Agencia.',
+        'Adotamos medidas técnicas e organizacionais razoáveis para proteger dados contra acesso não autorizado, perda ou alteração. Nenhum sistema é 100% seguro; recomendamos não enviar dados sensíveis desnecessários e usar canais oficiais da Golden Agência.',
       ],
     },
     {
-      title: '12. Alteracoes desta politica',
+      title: '12. Alterações desta política',
       paragraphs: [
-        'Podemos atualizar esta pagina para refletir mudancas legais ou nos servicos. A data de "Ultima atualizacao" no topo sera revisada quando houver alteracao relevante. O uso continuado do site apos publicacao pode indicar ciencia das mudancas, salvo quando a lei exigir consentimento adicional.',
+        'Podemos atualizar esta página para refletir mudanças legais ou nos serviços. A data de "Última atualização" no topo será revisada quando houver alteração relevante. O uso continuado do site após publicação pode indicar ciência das mudanças, salvo quando a lei exigir consentimento adicional.',
       ],
     },
     {
       title: '13. Contato',
       paragraphs: [
-        'Em caso de duvidas sobre privacidade ou tratamento de dados: leah@goldenagencia.com | (913) 257-7256 | Instagram: @goldenagenciakc',
+        'Em caso de dúvidas sobre privacidade ou tratamento de dados: leah@goldenagencia.com | (913) 257-7256 | Instagram: @goldenagenciakc',
       ],
     },
   ],

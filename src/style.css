@@ -16,3 +16,284 @@ body {
   background: #f5f7fb;
   color: #1f2d3d;
 }
+
+/* Conteudo Markdown (blog / guia): restaura semantica visual frente a resets (ex.: Ant Design). */
+.ga-markdown {
+  --md-prose-body: #1f2d3d;
+  --md-prose-muted: #5c6b7a;
+  --md-prose-heading: #0f2742;
+  --md-prose-link: #1a4572;
+  --md-prose-code-bg: #eef2f7;
+  --md-prose-pre-bg: #0f2742;
+  --md-prose-pre-fg: #e8f0fa;
+  --md-prose-border: #d9dee6;
+  --md-prose-accent: #d4a017;
+
+  color: var(--md-prose-body);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  max-width: 72ch;
+  word-wrap: break-word;
+  overflow-x: auto;
+}
+
+.ga-markdown > :first-child {
+  margin-top: 0;
+}
+
+.ga-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+/* Titulos — escalas distintas (como no preview de Markdown) */
+.ga-markdown h1,
+.ga-markdown h2,
+.ga-markdown h3,
+.ga-markdown h4,
+.ga-markdown h5,
+.ga-markdown h6 {
+  margin: 1.15em 0 0.45em;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--md-prose-heading);
+  letter-spacing: -0.02em;
+}
+
+.ga-markdown h1 {
+  font-size: 2em;
+  border-bottom: 1px solid var(--md-prose-border);
+  padding-bottom: 0.25em;
+}
+
+.ga-markdown h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid var(--md-prose-border);
+  padding-bottom: 0.2em;
+}
+
+.ga-markdown h3 {
+  font-size: 1.25em;
+}
+
+.ga-markdown h4 {
+  font-size: 1.1em;
+}
+
+.ga-markdown h5 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--md-prose-muted);
+}
+
+.ga-markdown h6 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--md-prose-muted);
+}
+
+.ga-markdown p {
+  margin: 0.85em 0;
+}
+
+.ga-markdown strong,
+.ga-markdown b {
+  font-weight: 700;
+  color: var(--md-prose-heading);
+}
+
+.ga-markdown em,
+.ga-markdown i {
+  font-style: italic;
+}
+
+.ga-markdown del,
+.ga-markdown s {
+  text-decoration: line-through;
+  color: var(--md-prose-muted);
+}
+
+.ga-markdown a {
+  color: var(--md-prose-link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ga-markdown a:hover {
+  color: #0d3558;
+}
+
+/* Listas */
+.ga-markdown ul,
+.ga-markdown ol {
+  margin: 0.85em 0;
+  padding-left: 1.75em;
+}
+
+.ga-markdown ul {
+  list-style-type: disc;
+}
+
+.ga-markdown ol {
+  list-style-type: decimal;
+}
+
+.ga-markdown li {
+  margin: 0.35em 0;
+}
+
+.ga-markdown li > p {
+  margin: 0.35em 0;
+}
+
+.ga-markdown ul ul,
+.ga-markdown ol ul {
+  list-style-type: circle;
+  margin-top: 0.35em;
+  margin-bottom: 0.35em;
+}
+
+.ga-markdown ul ul ul,
+.ga-markdown ol ul ul {
+  list-style-type: square;
+}
+
+.ga-markdown ol ol {
+  list-style-type: lower-alpha;
+}
+
+.ga-markdown ol ol ol {
+  list-style-type: lower-roman;
+}
+
+/* Listas de tarefas (GFM) */
+.ga-markdown ul.contains-task-list {
+  list-style: none;
+  padding-left: 1.35em;
+}
+
+.ga-markdown li.task-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5em;
+  list-style: none;
+}
+
+.ga-markdown li.task-list-item input[type='checkbox'] {
+  margin: 0.35em 0 0;
+  flex-shrink: 0;
+  accent-color: var(--md-prose-accent);
+}
+
+/* Citacao */
+.ga-markdown blockquote {
+  margin: 1em 0;
+  padding: 0.35em 0 0.35em 1em;
+  border-left: 4px solid var(--md-prose-accent);
+  color: var(--md-prose-muted);
+  font-style: italic;
+}
+
+.ga-markdown blockquote > :first-child {
+  margin-top: 0;
+}
+
+.ga-markdown blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.ga-markdown blockquote p {
+  margin: 0.5em 0;
+}
+
+/* Codigo inline e blocos */
+.ga-markdown code {
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--md-prose-code-bg);
+  padding: 0.12em 0.4em;
+  border-radius: 5px;
+  border: 1px solid rgba(15, 39, 66, 0.08);
+}
+
+.ga-markdown pre {
+  margin: 1em 0;
+  background: var(--md-prose-pre-bg);
+  color: var(--md-prose-pre-fg);
+  padding: 14px 16px;
+  border-radius: 10px;
+  overflow: auto;
+  font-size: 0.9em;
+  line-height: 1.55;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ga-markdown pre code {
+  background: transparent;
+  padding: 0;
+  border: 0;
+  font-size: inherit;
+  color: inherit;
+  border-radius: 0;
+}
+
+/* Separador */
+.ga-markdown hr {
+  margin: 2em 0;
+  border: 0;
+  border-top: 1px solid var(--md-prose-border);
+}
+
+/* Tabelas (GFM) */
+.ga-markdown table {
+  width: 100%;
+  margin: 1.15em 0;
+  border-collapse: collapse;
+  font-size: 0.95em;
+  border: 1px solid var(--md-prose-border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ga-markdown thead th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--md-prose-heading);
+  background: #f4f7fb;
+}
+
+.ga-markdown th,
+.ga-markdown td {
+  border: 1px solid var(--md-prose-border);
+  padding: 0.55em 0.75em;
+  vertical-align: top;
+}
+
+.ga-markdown tbody tr:nth-child(even) {
+  background: rgba(244, 247, 251, 0.65);
+}
+
+/* Imagens dentro do corpo */
+.ga-markdown img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1em 0;
+}
+
+/* Nota de rodape / sup (se usado) */
+.ga-markdown sup,
+.ga-markdown sub {
+  font-size: 0.75em;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.ga-markdown sup {
+  top: -0.4em;
+}
+
+.ga-markdown sub {
+  bottom: -0.25em;
+}

@@ -11,8 +11,13 @@ import { Button, Card, Col, Drawer, Layout, Row, Segmented, Space, Tag, Typograp
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
+import { AdminRoutes } from './admin/AdminRoutes'
 import { privacyPolicyEn, privacyPolicyPtBR } from './content/privacyPolicy'
-import logo2Webp from './assets/logo-2.webp'
+import { BlogPage } from './pages/BlogPage'
+import { BlogPostPage } from './pages/BlogPostPage'
+import { LocalBusinessPage } from './pages/LocalBusinessPage'
+import { LocalGuidePage } from './pages/LocalGuidePage'
+import logo2Webp from './assets/logo-modern-2.webp'
 import teamHianiWebp from './assets/team/hiani.webp'
 import teamLeahWebp from './assets/team/leah.webp'
 import teamNayWebp from './assets/team/nay.webp'
@@ -33,8 +38,8 @@ const translations = {
     contactCta: 'Fale conosco',
     nav: {
       home: 'Home',
-      services: 'Servicos',
-      pricing: 'Precos',
+      services: 'Serviços',
+      pricing: 'Preços',
       blog: 'Blog',
       contact: 'Contato',
       localGuide: 'Guia Local',
@@ -43,125 +48,125 @@ const translations = {
     remoteTag: 'Atendimento remoto e presencial',
     heroTitle: 'Como podemos te ajudar hoje?',
     heroDesc:
-      'A Golden Agencia nasceu para apoiar brasileiros que estao construindo a vida nos Estados Unidos. Cuidamos das tarefas burocraticas para voce ganhar tempo, clareza e tranquilidade.',
+      'A Golden Agência nasceu para apoiar brasileiros que estão construindo a vida nos Estados Unidos. Cuidamos das tarefas burocráticas para você ganhar tempo, clareza e tranquilidade.',
     whatsappBtn: 'Chamar no WhatsApp',
     emailBtn: 'Enviar e-mail',
-    servicesTitle: 'Nossos servicos',
+    servicesTitle: 'Nossos serviços',
     servicesDesc:
-      'Atuamos como ponte entre voce e os processos do dia a dia. Da impressao de documentos ao suporte com aplicacoes, oferecemos atendimento humanizado e pratico.',
+      'Atuamos como ponte entre você e os processos do dia a dia. Da impressão de documentos ao suporte com aplicações, oferecemos atendimento humanizado e prático.',
     services: [
       {
-        title: 'Impressao e copias',
+        title: 'Impressão e cópias',
         items: [
-          'Impressao de documentos e formularios',
-          'Copias de passaporte, certidoes e CPF',
-          'Digitalizacao de documentos e fotos',
+          'Impressão de documentos e formulários',
+          'Cópias de passaporte, certidões e CPF',
+          'Digitalização de documentos e fotos',
         ],
       },
       {
-        title: 'Ligacoes e e-mails',
+        title: 'Ligações e e-mails',
         items: [
-          'Chamadas telefonicas curtas e longas',
+          'Chamadas telefônicas curtas e longas',
           'Envio de e-mails pessoais e profissionais',
-          'Contato com bancos, suporte tecnico e servicos',
+          'Contato com bancos, suporte técnico e serviços',
         ],
       },
       {
-        title: 'Agendamentos e inscricoes',
+        title: 'Agendamentos e inscrições',
         items: [
-          'Consultas medicas, DMV e matriculas escolares',
+          'Consultas médicas, DMV e matrículas escolares',
           'Reservas de hotel, restaurante e eventos',
-          'Criacao de contas online e inscricoes em programas',
+          'Criação de contas online e inscrições em programas',
         ],
       },
       {
-        title: 'Criacao de documentos',
+        title: 'Criação de documentos',
         items: [
-          'Carta para condominio e verificacao de emprego',
-          'Declaracao de renda mensal',
-          'Redacao de textos em portugues e ingles',
+          'Carta para condomínio e verificação de emprego',
+          'Declaração de renda mensal',
+          'Redação de textos em português e inglês',
         ],
       },
       {
-        title: 'Auxilio com aplicacoes',
+        title: 'Auxílio com aplicações',
         items: [
-          'Moradia, casamento, divorcio e pensao de menores',
-          'Aplicacoes DCF e Medicaid',
-          'Orientacao para medidas protetivas',
+          'Moradia, casamento, divórcio e pensão de menores',
+          'Aplicações DCF e Medicaid',
+          'Orientação para medidas protetivas',
         ],
       },
       {
-        title: 'Assistencia virtual',
+        title: 'Assistência virtual',
         items: [
-          'Gestao da agenda familiar e controle de contas',
-          'Organizacao digital de documentos',
-          'Atendimento para pequenas empresas e emissao de faturas',
+          'Gestão da agenda familiar e controle de contas',
+          'Organização digital de documentos',
+          'Atendimento para pequenas empresas e emissão de faturas',
         ],
       },
     ],
-    pricingTitle: 'Precos',
+    pricingTitle: 'Preços',
     pricingDesc:
-      'Cada atendimento e unico. Entre em contato para receber uma estimativa personalizada de acordo com o tipo de servico e urgencia.',
+      'Cada atendimento é único. Entre em contato para receber uma estimativa personalizada de acordo com o tipo de serviço e urgência.',
     pricingBoards: [
       {
-        title: 'Servicos diversos e apoio administrativo',
-        description: 'Impressoes, agendamentos, documentos e assessoria consular.',
+        title: 'Serviços diversos e apoio administrativo',
+        description: 'Impressões, agendamentos, documentos e assessoria consular.',
         sections: [
           {
-            title: 'Impressao e copias',
+            title: 'Impressão e cópias',
             items: [
-              'Impressao de documentos: $0.50 por pagina',
-              'Impressao de adesivos e papel fotografico: $3 por pagina',
-              'Copia colorida de passaporte e certidoes: $1 por pagina',
-              'Digitalizacao de fotos e documentos: $2 (envio incluso)',
+              'Impressão de documentos: $0.50 por página',
+              'Impressão de adesivos e papel fotográfico: $3 por página',
+              'Cópia colorida de passaporte e certidões: $1 por página',
+              'Digitalização de fotos e documentos: $2 (envio incluso)',
             ],
           },
           {
-            title: 'Ligacoes, agendamento, inscricoes',
+            title: 'Ligações, agendamento, inscrições',
             items: [
-              'Chamadas telefonicas a partir de $10',
-              'Agendamento de consultas medicas: $20',
-              'Inscricoes em programas escolares: $30',
+              'Chamadas telefônicas a partir de $10',
+              'Agendamento de consultas médicas: $20',
+              'Inscrições em programas escolares: $30',
               'Pagamentos, agendamento e visita ao DMV: $30',
             ],
           },
           {
-            title: 'Documentos, cartas formais e servicos consulares',
+            title: 'Documentos, cartas formais e serviços consulares',
             items: [
-              'Criacao e envio de cartas formais: $30',
-              'Redigir textos em ingles ou portugues: $25',
-              'Servicos consulares a partir de $50',
+              'Criação e envio de cartas formais: $30',
+              'Redigir textos em inglês ou português: $25',
+              'Serviços consulares a partir de $50',
             ],
           },
         ],
       },
       {
-        title: 'Solucoes pessoais e assistencia virtual',
-        description: 'De aplicacoes a combos mensais para facilitar sua vida.',
+        title: 'Soluções pessoais e assistência virtual',
+        description: 'De aplicações a combos mensais para facilitar sua vida.',
         sections: [
           {
-            title: 'Aplicacoes',
+            title: 'Aplicações',
             items: [
               'Moradia: $80',
               'DCF, Medicaid e Medida Protetiva: $100',
-              'Divorcio: $180',
-              'Pensao alimenticia: $160',
+              'Divórcio: $180',
+              'Pensão alimentícia: $160',
             ],
           },
           {
-            title: 'Assistencia virtual',
+            title: 'Assistência virtual',
             items: [
               '1 hora: $40',
-              '5 horas por mes: $170',
-              '15 horas por mes: $450',
+              '5 horas por mês: $170',
+              '15 horas por mês: $450',
               'Secretariado full time: $2.5k (30h semanais)',
             ],
           },
           {
-            title: 'Combo "Primeiro mes" - $300',
+            title: 'Combo "Primeiro mês" - $300',
             items: [
-              'Aplicacao em condominios',
-              'Aberturas de contas utilitarias',
+              'Aplicação em condomínios',
+              'Aberturas de contas utilitárias',
               'Telefone',
               'Escola',
               'Seguros',
@@ -170,25 +175,25 @@ const translations = {
         ],
       },
       {
-        title: 'Marketing e servicos complementares',
+        title: 'Marketing e serviços complementares',
         description:
-          'Impulsione seu negocio, conte com nosso suporte e pague com praticidade.',
+          'Impulsione seu negócio, conte com nosso suporte e pague com praticidade.',
         sections: [
           {
             title: 'Marketing digital',
             items: [
-              'Criacao e postagens: $20',
-              'Gestao de Google Meu Negocio: $50',
-              'Criacao de site para empresa: $400',
+              'Criação e postagens: $20',
+              'Gestão de Google Meu Negócio: $50',
+              'Criação de site para empresa: $400',
             ],
           },
           {
-            title: 'Servicos extras',
+            title: 'Serviços extras',
             items: [
-              'Traducao',
-              'Servicos contabeis',
-              'Servicos juridicos',
-              'Servicos personalizados',
+              'Tradução',
+              'Serviços contábeis',
+              'Serviços jurídicos',
+              'Serviços personalizados',
             ],
           },
           {
@@ -200,45 +205,49 @@ const translations = {
     ],
     blogTitle: 'Blog',
     blogDesc:
-      'Conteudo pratico para brasileiros nos Estados Unidos: guias, documentos, prazos e dicas para facilitar sua rotina.',
+      'Conteúdo prático para brasileiros nos Estados Unidos: guias, documentos, prazos e dicas para facilitar sua rotina.',
     localGuideTitle: 'Guia Local',
     localGuideDesc:
-      'Indicacoes de servicos e parceiros que podem apoiar voce e sua familia na regiao.',
+      'Indicações de serviços e parceiros que podem apoiar você e sua família na região.',
     partnerTitle: 'Seja nosso parceiro',
     partnerHighlight: 'Quer divulgar sua empresa no nosso site?',
     partnerDesc:
-      'Voce empreendedor brasileiro, temos o prazer de convida-lo a integrar o nosso Guia Local, uma iniciativa dedicada a conectar profissionais de excelencia a comunidade brasileira residente no Kansas.',
+      'Você, empreendedor brasileiro, temos o prazer de convidá-lo a integrar o nosso Guia Local, uma iniciativa dedicada a conectar profissionais de excelência à comunidade brasileira residente no Kansas.',
     partnerDesc2:
-      'Nosso objetivo e consolidar um ecossistema de servicos confiaveis, facilitando o acesso de nossos concidadaos a solucoes qualificadas em seu proprio idioma.',
+      'Nosso objetivo é consolidar um ecossistema de serviços confiáveis, facilitando o acesso de nossos concidados a soluções qualificadas em seu próprio idioma.',
     partnerDesc3:
-      'Ao listar sua empresa ou sua organizacao em nossa plataforma, voce nao apenas amplia a visibilidade de seu negocio, mas tambem contribui diretamente para o fortalecimento e o desenvolvimento socioeconomico da nossa comunidade na regiao.',
+      'Ao listar sua empresa ou sua organização em nossa plataforma, você não apenas amplia a visibilidade de seu negócio, mas também contribui diretamente para o fortalecimento e o desenvolvimento socioeconômico da nossa comunidade na região.',
     partnerDesc4:
-      'Preencha o formulario abaixo e em breve nossa equipe entrara em contato com voce.',
+      'Preencha o formulário abaixo e em breve nossa equipe entrará em contato com você.',
     partnerDesc5: 'Obrigado por fortalecer nossa comunidade.',
     aboutTitle: 'Sobre a Golden',
     aboutDesc:
-      'A Golden Agencia nasceu de uma percepcao real e vivenciada: a jornada do imigrante brasileiro e repleta de sonhos, mas tambem de obstaculos invisiveis. Percebemos que tarefas cotidianas tornam-se desafios gigantescos quando barreiras como o idioma, o choque cultural e a falta de tempo se impoem.',
+      'A Golden Agência nasceu de uma percepção real e vivenciada: a jornada do imigrante brasileiro é repleta de sonhos, mas também de obstáculos invisíveis. Percebemos que tarefas cotidianas tornam-se desafios gigantescos quando barreiras como o idioma, o choque cultural e a falta de tempo se impõem.',
     objectiveTitle: 'Nosso Objetivo',
     objectiveDesc:
-      'Queremos ser a ponte que elimina essas barreiras, oferecendo o suporte necessario para que voce foque no seu crescimento, carreira e no bem-estar da sua familia.',
-    purposeTitle: 'Nosso Proposito',
+      'Queremos ser a ponte que elimina essas barreiras, oferecendo o suporte necessário para que você foque no seu crescimento, carreira e no bem-estar da sua família.',
+    purposeTitle: 'Nosso Propósito',
     purposeDesc:
-      'Mais do que prestar servicos, buscamos fortalecer a comunidade brasileira, simplificando processos e promovendo integracao, confianca e apoio mutuo.',
-    quickContactTitle: 'Contato rapido',
+      'Mais do que prestar serviços, buscamos fortalecer a comunidade brasileira, simplificando processos e promovendo integração, confiança e apoio mútuo.',
+    quickContactTitle: 'Contato rápido',
     quickContactDesc:
-      'Se a barreira do ingles ou a complexidade do dia a dia estao limitando seu potencial, estamos aqui por voce.',
+      'Se a barreira do inglês ou a complexidade do dia a dia estão limitando seu potencial, estamos aqui por você.',
     quickContactSupportText:
-      'Estamos a disposicao para tirar suas duvidas e encontrar caminhos que facilitem sua rotina na regiao. Escolha o canal de sua preferencia e entre em contato agora mesmo. Estamos aqui para ajudar!',
+      'Estamos à disposição para tirar suas dúvidas e encontrar caminhos que facilitem sua rotina na região. Escolha o canal de sua preferência e entre em contato agora mesmo. Estamos aqui para ajudar!',
     contactTeamLines: [
       'Hiani Karoliny (Agente em Kansas)',
-      'Leah Golden (Virtual Assistente)',
+      'Leah Golden (Assistente Virtual)',
     ],
     phoneLabel: 'Telefone / WhatsApp',
     emailLabel: 'E-mail',
     instagramLabel: 'Instagram',
+    openMainMenu: 'Abrir menu principal',
+    closeMenu: 'Fechar menu',
+    mainNavigationAria: 'Navegação principal',
+    drawerLanguageHeading: 'Idioma do site',
     teamTitle: 'Minha equipe',
     teamDescription:
-      'Pessoas que tornam o atendimento da Golden Agencia acolhedor, humano e eficiente.',
+      'Pessoas que tornam o atendimento da Golden Agência acolhedor, humano e eficiente.',
     teamMembers: [
       {
         image: teamNayWebp,
@@ -256,8 +265,10 @@ const translations = {
         role: 'Assistente Virtual',
       },
     ],
-    privacyFooterLink: 'Politica de Privacidade',
-    footer: 'Golden Agencia • Atendimento para imigrantes brasileiros nos EUA',
+    privacyFooterLink: 'Política de Privacidade',
+    adminFooterLink: 'Painel (gestores)',
+    editContentInPanel: 'Editar no painel',
+    footer: 'Golden Agência • Atendimento para imigrantes brasileiros nos EUA',
   },
   en: {
     siteName: 'Agency KC',
@@ -459,6 +470,10 @@ const translations = {
     phoneLabel: 'Phone / WhatsApp',
     emailLabel: 'E-mail',
     instagramLabel: 'Instagram',
+    openMainMenu: 'Open main menu',
+    closeMenu: 'Close menu',
+    mainNavigationAria: 'Main navigation',
+    drawerLanguageHeading: 'Site language',
     teamTitle: 'Our team',
     teamDescription:
       'The people who make Golden Agency support welcoming, human, and efficient.',
@@ -480,6 +495,8 @@ const translations = {
       },
     ],
     privacyFooterLink: 'Privacy Policy',
+    adminFooterLink: 'Staff dashboard',
+    editContentInPanel: 'Edit in dashboard',
     footer: 'Golden Agency • Support for Brazilian immigrants in the USA',
   },
 }
@@ -495,6 +512,24 @@ const navigationItems = [
   { path: '/guia-local', key: 'localGuide' as const },
   { path: '/parceiro', key: 'partner' as const },
 ]
+
+const MOBILE_HEADER_QUERY = '(max-width: 900px)'
+
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia(query).matches : false,
+  )
+
+  useEffect(() => {
+    const media = window.matchMedia(query)
+    const listener = () => setMatches(media.matches)
+    setMatches(media.matches)
+    media.addEventListener('change', listener)
+    return () => media.removeEventListener('change', listener)
+  }, [query])
+
+  return matches
+}
 
 function HomePage({ t }: { t: Translations }) {
   return (
@@ -615,24 +650,6 @@ function PricingPage({ t }: { t: Translations }) {
   )
 }
 
-function BlogPage({ t }: { t: Translations }) {
-  return (
-    <Section>
-      <SectionTitle level={2}>{t.blogTitle}</SectionTitle>
-      <Paragraph>{t.blogDesc}</Paragraph>
-    </Section>
-  )
-}
-
-function LocalGuidePage({ t }: { t: Translations }) {
-  return (
-    <Section>
-      <SectionTitle level={2}>{t.localGuideTitle}</SectionTitle>
-      <Paragraph>{t.localGuideDesc}</Paragraph>
-    </Section>
-  )
-}
-
 function PartnerPage({ t }: { t: Translations }) {
   return (
     <Section>
@@ -734,50 +751,55 @@ function ScrollToTop() {
 function AppLayout({ t, language, setLanguage }: { t: Translations; language: Language; setLanguage: (language: Language) => void }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
+  const isCompactHeader = useMediaQuery(MOBILE_HEADER_QUERY)
+
+  useEffect(() => {
+    setMobileMenuOpen(false)
+  }, [location.pathname])
 
   useEffect(() => {
     const metaByPath: Record<string, { title: string; description: string }> = {
       '/': {
         title: `${t.siteName} | Despachante e suporte para imigrantes`,
         description:
-          'A Golden Agencia oferece suporte para imigrantes brasileiros nos EUA com servicos de documentos, agendamentos, aplicacoes, assistencia virtual e atendimento em portugues.',
+          'A Golden Agência oferece suporte para imigrantes brasileiros nos EUA com serviços de documentos, agendamentos, aplicações, assistência virtual e atendimento em português.',
       },
       '/servicos': {
-        title: `Servicos | ${t.siteName}`,
+        title: `Serviços | ${t.siteName}`,
         description:
-          'Conheca os servicos da Golden Agencia: impressao e copias, ligacoes, agendamentos, criacao de documentos, aplicacoes e assistencia virtual.',
+          'Conheça os serviços da Golden Agência: impressão e cópias, ligações, agendamentos, criação de documentos, aplicações e assistência virtual.',
       },
       '/precos': {
-        title: `Precos e pacotes | ${t.siteName}`,
+        title: `Preços e pacotes | ${t.siteName}`,
         description:
-          'Veja estimativas de precos e pacotes da Golden Agencia para servicos administrativos, assistencia virtual, marketing e servicos complementares.',
+          'Veja estimativas de preços e pacotes da Golden Agência para serviços administrativos, assistência virtual, marketing e serviços complementares.',
       },
       '/blog': {
         title: `Blog | ${t.siteName}`,
         description:
-          'Leia conteudos praticos para brasileiros nos EUA com orientacoes sobre documentos, prazos, processos e rotina no exterior.',
+          'Leia conteúdos práticos para brasileiros nos EUA com orientações sobre documentos, prazos, processos e rotina no exterior.',
       },
       '/contato': {
         title: `Contato | ${t.siteName}`,
         description:
-          'Entre em contato com a Golden Agencia por WhatsApp, e-mail ou Instagram e receba atendimento rapido para suas necessidades.',
+          'Entre em contato com a Golden Agência por WhatsApp, e-mail ou Instagram e receba atendimento rápido para suas necessidades.',
       },
       '/guia-local': {
         title: `Guia Local | ${t.siteName}`,
         description:
-          'Descubra parceiros e servicos recomendados no Guia Local da Golden Agencia para apoiar brasileiros na regiao do Kansas.',
+          'Descubra parceiros e serviços recomendados no Guia Local da Golden Agência para apoiar brasileiros na região do Kansas.',
       },
       '/parceiro': {
         title: `Seja nosso parceiro | ${t.siteName}`,
         description:
-          'Divulgue sua empresa no site da Golden Agencia e conecte seu negocio com a comunidade brasileira no Kansas.',
+          'Divulgue sua empresa no site da Golden Agência e conecte seu negócio com a comunidade brasileira no Kansas.',
       },
       '/politica-de-privacidade':
         language === 'pt-BR'
           ? {
-              title: `Politica de Privacidade | ${t.siteName}`,
+              title: `Política de Privacidade | ${t.siteName}`,
               description:
-                'Saiba como a Golden Agencia coleta, usa e protege seus dados pessoais ao usar o site e nossos servicos de apoio a imigrantes.',
+                'Saiba como a Golden Agência coleta, usa e protege seus dados pessoais ao usar o site e nossos serviços de apoio a imigrantes.',
             }
           : {
               title: `Privacy Policy | ${t.siteName}`,
@@ -787,7 +809,20 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
     }
 
     const fallbackMeta = metaByPath['/']
-    const pageMeta = metaByPath[location.pathname] ?? fallbackMeta
+    let pageMeta = metaByPath[location.pathname]
+    if (!pageMeta && location.pathname.startsWith('/blog/') && location.pathname !== '/blog') {
+      pageMeta = {
+        title: `Artigo | ${t.siteName}`,
+        description: t.blogDesc,
+      }
+    }
+    if (!pageMeta && location.pathname.startsWith('/guia-local/') && location.pathname !== '/guia-local') {
+      pageMeta = {
+        title: `Guia local | ${t.siteName}`,
+        description: t.localGuideDesc,
+      }
+    }
+    if (!pageMeta) pageMeta = fallbackMeta
     const canonicalUrl = `${SITE_URL}${location.pathname === '/' ? '' : location.pathname}`
 
     document.title = pageMeta.title
@@ -816,41 +851,49 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
     <PageLayout>
       <TopHeader>
         <HeaderTopRow>
-          <Brand to="/">
-            <BrandColumn>
+          <HeaderLeading>
+            <Brand
+              to="/"
+              onClick={() => {
+                if (isCompactHeader) setMobileMenuOpen(false)
+              }}
+            >
               <BrandIdentity>
-                <BrandLogo src={logo2Webp} alt="Logo Golden Agencia" />
-                <BrandTitle>{t.siteName}</BrandTitle>
+                <BrandLogo src={logo2Webp} alt="Logo Golden Agência" />
               </BrandIdentity>
               <HeaderSubtitle>{t.siteTagline}</HeaderSubtitle>
-            </BrandColumn>
-          </Brand>
+            </Brand>
+          </HeaderLeading>
           <HeaderActionsGroup>
             <TopActions>
-              <LanguageControl>
-                <Segmented
-                  size="middle"
-                  value={language}
-                  options={[
-                    { label: 'PT-BR', value: 'pt-BR' },
-                    { label: 'EN', value: 'en' },
-                  ]}
-                  onChange={(value) => setLanguage(value as Language)}
-                />
-              </LanguageControl>
+              {!isCompactHeader && (
+                <LanguageControl>
+                  <Segmented
+                    size="middle"
+                    value={language}
+                    options={[
+                      { label: 'PT-BR', value: 'pt-BR' },
+                      { label: 'EN', value: 'en' },
+                    ]}
+                    onChange={(value) => setLanguage(value as Language)}
+                  />
+                </LanguageControl>
+              )}
               <HeaderContactButton
                 type="primary"
-                icon={<ArrowRightOutlined />}
+                icon={isCompactHeader ? <WhatsAppOutlined /> : <ArrowRightOutlined />}
                 aria-label={t.contactCta}
+                title={isCompactHeader ? t.contactCta : undefined}
                 href={WHATSAPP_LINK}
                 target="_blank"
                 rel="noreferrer"
               >
-                {t.contactCta}
+                {!isCompactHeader ? t.contactCta : null}
               </HeaderContactButton>
               <HeaderInstagramButton
                 icon={<InstagramOutlined />}
-                aria-label="Instagram Golden Agencia"
+                aria-label={t.instagramLabel}
+                title={t.instagramLabel}
                 href={INSTAGRAM_LINK}
                 target="_blank"
                 rel="noreferrer"
@@ -860,7 +903,8 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
             </TopActions>
             <MobileMenuButton
               type="text"
-              aria-label="Abrir menu"
+              aria-label={t.openMainMenu}
+              aria-expanded={mobileMenuOpen}
               icon={<MenuOutlined />}
               onClick={() => setMobileMenuOpen(true)}
             />
@@ -880,18 +924,37 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
       <MobileDrawer
         title={t.siteName}
         placement="left"
+        width={360}
         open={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
+        closable={{ 'aria-label': t.closeMenu }}
+        styles={{ body: { paddingTop: 12 } }}
       >
-        <MobileNavList>
-          {navigationItems.map((item) => (
-            <li key={item.path}>
-              <MobileMenuLink to={item.path} end={item.path === '/'} onClick={() => setMobileMenuOpen(false)}>
-                {t.nav[item.key]}
-              </MobileMenuLink>
-            </li>
-          ))}
-        </MobileNavList>
+        <MobileDrawerLanguageBlock>
+          <MobileDrawerSectionLabel id="mobile-drawer-lang-heading">{t.drawerLanguageHeading}</MobileDrawerSectionLabel>
+          <Segmented
+            block
+            size="large"
+            aria-labelledby="mobile-drawer-lang-heading"
+            value={language}
+            options={[
+              { label: 'PT-BR', value: 'pt-BR' },
+              { label: 'EN', value: 'en' },
+            ]}
+            onChange={(value) => setLanguage(value as Language)}
+          />
+        </MobileDrawerLanguageBlock>
+        <nav aria-label={t.mainNavigationAria}>
+          <MobileNavList>
+            {navigationItems.map((item) => (
+              <li key={item.path}>
+                <MobileMenuLink to={item.path} end={item.path === '/'} onClick={() => setMobileMenuOpen(false)}>
+                  {t.nav[item.key]}
+                </MobileMenuLink>
+              </li>
+            ))}
+          </MobileNavList>
+        </nav>
       </MobileDrawer>
 
       <MainContent>
@@ -901,8 +964,28 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
           <Route path="/servicos" element={<ServicesPage t={t} />} />
           <Route path="/precos" element={<PricingPage t={t} />} />
           <Route path="/blog" element={<BlogPage t={t} />} />
+          <Route
+            path="/blog/:slug"
+            element={
+              <BlogPostPage
+                siteName={t.siteName}
+                backLabel={`← ${t.nav.blog}`}
+                editInPanelLabel={t.editContentInPanel}
+              />
+            }
+          />
           <Route path="/contato" element={<ContactPage t={t} />} />
           <Route path="/guia-local" element={<LocalGuidePage t={t} />} />
+          <Route
+            path="/guia-local/:id"
+            element={
+              <LocalBusinessPage
+                siteName={t.siteName}
+                backLabel={`← ${t.nav.localGuide}`}
+                editInPanelLabel={t.editContentInPanel}
+              />
+            }
+          />
           <Route path="/parceiro" element={<PartnerPage t={t} />} />
           <Route path="/politica-de-privacidade" element={<PrivacyPage language={language} />} />
           <Route path="*" element={<Navigate to="/" replace />} />
@@ -912,7 +995,11 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
       <PageFooter>
         <FooterBar>
           <FooterText>{t.footer}</FooterText>
-          <FooterPrivacyLink to="/politica-de-privacidade">{t.privacyFooterLink}</FooterPrivacyLink>
+          <FooterLinksRow>
+            <FooterPrivacyLink to="/politica-de-privacidade">{t.privacyFooterLink}</FooterPrivacyLink>
+            <FooterLinkSep aria-hidden>·</FooterLinkSep>
+            <FooterAdminLink to="/admin">{t.adminFooterLink}</FooterAdminLink>
+          </FooterLinksRow>
         </FooterBar>
       </PageFooter>
 
@@ -933,7 +1020,12 @@ function App() {
   const [language, setLanguage] = useState<Language>('pt-BR')
   const t = useMemo(() => translations[language], [language])
 
-  return <AppLayout t={t} language={language} setLanguage={setLanguage} />
+  return (
+    <Routes>
+      <Route path="/admin/*" element={<AdminRoutes />} />
+      <Route path="/*" element={<AppLayout t={t} language={language} setLanguage={setLanguage} />} />
+    </Routes>
+  )
 }
 
 const PageLayout = styled(Layout)`
@@ -980,6 +1072,9 @@ const FloatingWhatsapp = styled.a`
 `
 
 const TopHeader = styled(Header)`
+  && {
+    text-align: left;
+  }
   background: #0f2742;
   color: #fff;
   min-height: 122px;
@@ -989,15 +1084,50 @@ const TopHeader = styled(Header)`
   flex-direction: column;
   align-items: stretch;
   gap: 10px;
+
+  @media (max-width: 900px) {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: 0;
+    gap: 6px;
+    padding-top: calc(10px + env(safe-area-inset-top, 0px));
+    padding-right: calc(clamp(12px, 3vw, 20px) + env(safe-area-inset-right, 0px));
+    padding-bottom: 10px;
+    padding-left: calc(clamp(12px, 3vw, 20px) + env(safe-area-inset-left, 0px));
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.22);
+  }
 `
 
 const HeaderTopRow = styled.div`
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
+  width: 100%;
   gap: 12px;
   row-gap: 10px;
   flex-wrap: wrap;
+
+  @media (max-width: 900px) {
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    row-gap: 0;
+  }
+`
+
+const HeaderLeading = styled.div`
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  margin-right: auto;
+  text-align: left;
+
+  @media (max-width: 900px) {
+    flex: 1 1 0;
+    margin-right: 0;
+    min-width: 0;
+  }
 `
 
 const HeaderActionsGroup = styled.div`
@@ -1008,50 +1138,61 @@ const HeaderActionsGroup = styled.div`
   gap: 8px;
   flex: 0 1 auto;
   min-width: 0;
+  margin-left: auto;
 
   @media (min-width: 901px) {
     flex-wrap: nowrap;
   }
+
+  @media (max-width: 900px) {
+    flex-wrap: nowrap;
+    flex: 0 0 auto;
+    margin-left: 0;
+    align-items: center;
+    gap: 6px;
+  }
 `
 
 const Brand = styled(NavLink)`
+  && {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
   text-decoration: none;
-  flex: 1 1 200px;
   min-width: 0;
   max-width: 100%;
-`
-
-const BrandColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0;
-  min-width: 0;
+  color: inherit;
 `
 
 const BrandIdentity = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: block;
+  gap: 0px;
   margin: 0;
   line-height: 1;
 `
 
 const BrandLogo = styled.img`
   display: block;
-  width: 82px;
+  width: 320px;
+  max-width: 100%;
   height: 82px;
   object-fit: contain;
-`
-
-const BrandTitle = styled.h1`
+  object-position: left center;
   margin: 0;
-  font-size: clamp(1rem, 3.0vw, 1.2rem);
-  line-height: 1.15;
-  margin-top: 30px;
-  color: #ffffff;
-  max-width: 100%;
-  overflow-wrap: anywhere;
+  align-self: flex-start;
+
+  @media (max-width: 900px) {
+    width: auto;
+    max-width: min(220px, 56vw);
+    height: clamp(42px, 11vw, 56px);
+  }
+
+  @media (max-width: 360px) {
+    max-width: min(200px, 50vw);
+    height: clamp(38px, 10vw, 48px);
+  }
 `
 
 const HeaderSubtitle = styled.p`
@@ -1066,6 +1207,18 @@ const HeaderSubtitle = styled.p`
   max-width: 100%;
   overflow-wrap: anywhere;
   word-wrap: break-word;
+  text-align: left;
+  align-self: stretch;
+
+  @media (max-width: 900px) {
+    margin-top: 2px;
+    font-size: clamp(0.68rem, 2.8vw, 0.82rem);
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
 `
 
 const NavList = styled.ul`
@@ -1110,6 +1263,13 @@ const TopActions = styled.div`
   justify-content: flex-end;
   min-width: 0;
   flex: 1 1 auto;
+
+  @media (max-width: 900px) {
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    gap: 6px;
+    min-width: 0;
+  }
 `
 
 const HeaderContactButton = styled(Button)`
@@ -1117,11 +1277,29 @@ const HeaderContactButton = styled(Button)`
     white-space: nowrap;
     flex-shrink: 0;
   }
+
+  @media (max-width: 900px) {
+    && {
+      min-width: 48px;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+    }
+  }
 `
 
 const HeaderInstagramButton = styled(Button)`
   && {
     flex-shrink: 0;
+  }
+
+  @media (max-width: 900px) {
+    && {
+      min-width: 48px;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+    }
   }
 `
 
@@ -1153,9 +1331,33 @@ const MobileMenuButton = styled(Button)`
 `
 
 const MobileDrawer = styled(Drawer)`
+  .ant-drawer-content-wrapper {
+    max-width: min(360px, calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 12px));
+  }
+
   .ant-drawer-header-title {
     color: #0f2742;
   }
+
+  .ant-drawer-body {
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+`
+
+const MobileDrawerLanguageBlock = styled.div`
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e4e9f2;
+`
+
+const MobileDrawerSectionLabel = styled.span`
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #5c6b7f;
+  margin-bottom: 10px;
 `
 
 const MobileNavList = styled.ul`
@@ -1164,17 +1366,26 @@ const MobileNavList = styled.ul`
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 `
 
 const MobileMenuLink = styled(NavLink)`
-  display: block;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
   text-decoration: none;
   color: #0f2742;
   font-weight: 600;
-  padding: 10px 12px;
-  border-radius: 8px;
+  font-size: 1rem;
+  padding: 12px 14px;
+  border-radius: 10px;
   background: #f3f6fb;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:active {
+    background: #e2e9f5;
+  }
 
   &.active {
     color: #ffffff;
@@ -1362,7 +1573,20 @@ const FooterText = styled.p`
   color: #ffffff;
 `
 
-const FooterPrivacyLink = styled(NavLink)`
+const FooterLinksRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 12px;
+`
+
+const FooterLinkSep = styled.span`
+  color: rgba(255, 255, 255, 0.55);
+  user-select: none;
+`
+
+const footerLinkStyle = `
   color: #ffffff;
   text-decoration: underline;
   font-size: 0.95rem;
@@ -1372,6 +1596,16 @@ const FooterPrivacyLink = styled(NavLink)`
     opacity: 1;
     color: #ffffff;
   }
+`
+
+const FooterPrivacyLink = styled(NavLink)`
+  ${footerLinkStyle}
+`
+
+const FooterAdminLink = styled(NavLink)`
+  ${footerLinkStyle}
+  opacity: 0.85;
+  font-size: 0.88rem;
 `
 
 export default App
