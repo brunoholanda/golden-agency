@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { ConfigProvider } from 'antd'
 import ptBR from 'antd/locale/pt_BR'
 import { BrowserRouter } from 'react-router-dom'
+import { GtagRouteListener } from './analytics/GtagRouteListener'
 import App from './App'
 import './style.css'
 
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('app')!).render(
       }}
     >
       <BrowserRouter>
+        <GtagRouteListener />
         <App />
       </BrowserRouter>
     </ConfigProvider>
