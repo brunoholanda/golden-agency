@@ -1,6 +1,7 @@
+import { ArrowLeftOutlined, SaveOutlined, UploadOutlined } from '@ant-design/icons'
 import MDEditor from '@uiw/react-md-editor'
 import '@uiw/react-md-editor/markdown-editor.css'
-import { Button, Input, Select, Space, Switch, Typography, Upload, message } from 'antd'
+import { Button, Divider, Flex, Input, Select, Space, Spin, Switch, Typography, Upload, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -10,6 +11,7 @@ import {
   adminUploadImage,
 } from '../api/adminApi'
 import { publicAssetUrl } from '../util/publicAssetUrl'
+import { AdminFieldLabel, AdminPageHeader, AdminPanelCard } from './AdminPageChrome'
 
 export function AdminBlogEditor() {
   const { id } = useParams()
@@ -72,79 +74,146 @@ export function AdminBlogEditor() {
     }
   }
 
-  if (loading) return <Typography.Paragraph>Carregando…</Typography.Paragraph>
+  if (loading) {
+    return (
+      <Flex align="center" justify="center" style={{ minHeight: 320 }}>
+        <Spin size="large" tip="Carregando artigo…" />
+      </Flex>
+    )
+  }
 
   return (
     <div data-color-mode="light">
-      <Typography.Title level={4} style={{ marginTop: 0 }}>
-        {isCreate ? 'Novo artigo' : 'Editar artigo'}
-      </Typography.Title>
-      <Space direction="vertical" size="large" style={{ width: '100%' }}>
-        <div>
-          <Typography.Text strong>Título</Typography.Text>
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={200} showCount style={{ marginTop: 8 }} />
-        </div>
-        <div>
-          <Typography.Text strong>Imagem de capa (1)</Typography.Text>
-          <div style={{ marginTop: 8 }}>
-            <Upload
-              accept="image/jpeg,image/png,image/webp,image/gif"
-              showUploadList={false}
-              beforeUpload={async (file) => {
-                setUploading(true)
-                try {
-                  const url = await adminUploadImage(file)
-                  setImageUrl(url)
-                  message.success('Imagem enviada (otimizada no navegador)')
-                } catch {
-                  message.error('Falha no upload')
-                } finally {
-                  setUploading(false)
-                }
-                return false
+      <AdminPageHeader
+        items={[
+          { label: 'Painel', path: '/admin/painel' },
+          { label: 'Blog', path: '/admin/blog' },
+          { label: isCreate ? 'Novo artigo' : 'Editar' },
+        ]}
+        title={isCreate ? 'Novo artigo' : 'Editar artigo'}
+        description="Imagem de capa otimizada no envio (até ~300 KB). Até 5 tags e corpo em Markdown."
+        extra={
+          <Button icon={<ArrowLeftOutlined />} size="large" onClick={() => navigate('/admin/blog')}>
+            Voltar à lista
+          </Button>
+        }
+      />
+
+      <AdminPanelCard>
+        <Space orientation="vertical" size="large" style={{ width: '100%' }}>
+          <div>
+            <AdminFieldLabel>Título</AdminFieldLabel>
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              maxLength={200}
+              showCount
+              size="large"
+              placeholder="Título do artigo"
+            />
+          </div>
+
+          <div>
+            <AdminFieldLabel>Imagem de capa</AdminFieldLabel>
+            <Typography.Paragraph type="secondary" style={{ marginTop: 0, marginBottom: 10, fontSize: 13 }}>
+              Uma imagem por artigo. Formatos: JPEG, PNG, WebP ou GIF.
+            </Typography.Paragraph>
+            <div
+              style={{
+                border: '1px dashed rgba(15, 23, 42, 0.15)',
+                borderRadius: 12,
+                padding: 16,
+                background: 'rgba(15, 23, 42, 0.02)',
               }}
             >
-              <Button loading={uploading}>Enviar imagem</Button>
-            </Upload>
+              <Upload
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                showUploadList={false}
+                beforeUpload={async (file) => {
+                  setUploading(true)
+                  try {
+                    const url = await adminUploadImage(file)
+                    setImageUrl(url)
+                    message.success('Imagem enviada')
+                  } catch {
+                    message.error('Falha no upload')
+                  } finally {
+                    setUploading(false)
+                  }
+                  return false
+                }}
+              >
+                <Button icon={<UploadOutlined />} loading={uploading}>
+                  Enviar imagem
+                </Button>
+              </Upload>
+              {imageUrl ? (
+                <img
+                  src={publicAssetUrl(imageUrl)}
+                  alt=""
+                  style={{
+                    marginTop: 16,
+                    maxWidth: '100%',
+                    width: 400,
+                    borderRadius: 10,
+                    display: 'block',
+                    border: '1px solid rgba(15, 23, 42, 0.08)',
+                    boxShadow: '0 4px 14px rgba(15, 23, 42, 0.08)',
+                  }}
+                />
+              ) : null}
+            </div>
           </div>
-          {imageUrl ? (
-            <img
-              src={publicAssetUrl(imageUrl)}
-              alt=""
-              style={{ marginTop: 12, maxWidth: 360, borderRadius: 8, display: 'block' }}
+
+          <div>
+            <AdminFieldLabel>Tags (até 5)</AdminFieldLabel>
+            <Select
+              mode="tags"
+              style={{ width: '100%' }}
+              size="large"
+              value={tags}
+              onChange={(next) => setTags(next.slice(0, 5))}
+              placeholder="Digite e pressione Enter"
+              tokenSeparators={[',']}
             />
-          ) : null}
-        </div>
-        <div>
-          <Typography.Text strong>Tags (até 5)</Typography.Text>
-          <Select
-            mode="tags"
-            style={{ width: '100%', marginTop: 8 }}
-            value={tags}
-            onChange={(next) => setTags(next.slice(0, 5))}
-            placeholder="Digite e pressione Enter"
-            tokenSeparators={[',']}
-          />
-        </div>
-        <div>
-          <Typography.Text strong>Texto (Markdown)</Typography.Text>
-          <div style={{ marginTop: 8 }}>
-            <MDEditor value={body} onChange={(v) => setBody(v || '')} height={420} preview="edit" />
           </div>
-        </div>
-        <div>
-          <Space>
-            <Typography.Text strong>Publicado</Typography.Text>
+
+          <Divider style={{ margin: '4px 0' }} />
+
+          <div>
+            <AdminFieldLabel>Texto (Markdown)</AdminFieldLabel>
+            <div
+              style={{
+                marginTop: 8,
+                borderRadius: 10,
+                overflow: 'hidden',
+                border: '1px solid rgba(15, 23, 42, 0.1)',
+              }}
+            >
+              <MDEditor value={body} onChange={(v) => setBody(v || '')} height={440} preview="edit" />
+            </div>
+          </div>
+
+          <Flex align="center" gap={12} wrap="wrap">
+            <AdminFieldLabel style={{ marginBottom: 0 }}>Publicado no site</AdminFieldLabel>
             <Switch checked={published} onChange={setPublished} />
-          </Space>
-        </div>
-        <Space>
-          <Button type="primary" loading={saving} onClick={() => void save()}>
-            Salvar
-          </Button>
-          <Button onClick={() => navigate('/admin/blog')}>Cancelar</Button>
+            <Typography.Text type="secondary" style={{ fontSize: 13 }}>
+              {published ? 'Visível para visitantes' : 'Oculto (rascunho)'}
+            </Typography.Text>
+          </Flex>
+
+          <Divider style={{ margin: '8px 0 0' }} />
+
+          <Flex gap="middle" wrap="wrap">
+            <Button type="primary" icon={<SaveOutlined />} size="large" loading={saving} onClick={() => void save()}>
+              Salvar
+            </Button>
+            <Button size="large" onClick={() => navigate('/admin/blog')}>
+              Cancelar
+            </Button>
+          </Flex>
         </Space>
-      </Space>
+      </AdminPanelCard>
     </div>
   )
 }

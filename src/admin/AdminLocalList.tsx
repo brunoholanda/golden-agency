@@ -1,8 +1,10 @@
-import { Button, Popconfirm, Space, Table, Typography, message } from 'antd'
+import { EditOutlined, PlusOutlined } from '@ant-design/icons'
+import { Badge, Button, Popconfirm, Space, Table, Typography, message } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { adminDeleteLocal, adminListLocal, type AdminLocal } from '../api/adminApi'
 import { publicAssetUrl } from '../util/publicAssetUrl'
+import { AdminPageHeader, AdminPanelCard } from './AdminPageChrome'
 
 export function AdminLocalList() {
   const navigate = useNavigate()
@@ -23,70 +25,131 @@ export function AdminLocalList() {
 
   return (
     <div>
-      <Space style={{ marginBottom: 16, width: '100%', justifyContent: 'space-between' }} align="start">
-        <Typography.Title level={4} style={{ margin: 0 }}>
-          Guia local
-        </Typography.Title>
-        <Button type="primary" onClick={() => navigate('/admin/guia-local/novo')}>
-          Novo comércio
-        </Button>
-      </Space>
-      <Table
-        rowKey="id"
-        loading={loading}
-        dataSource={rows}
-        pagination={{ pageSize: 10 }}
-        onRow={(record) => ({
-          onDoubleClick: () => navigate(`/admin/guia-local/${record.id}`),
-        })}
-        columns={[
-          {
-            title: 'Foto',
-            dataIndex: 'imageUrl',
-            width: 88,
-            render: (url: string) => (
-              <img src={publicAssetUrl(url)} alt="" style={{ width: 64, height: 48, objectFit: 'cover', borderRadius: 6 }} />
-            ),
-          },
-          { title: 'Título', dataIndex: 'title' },
-          { title: 'Contato', dataIndex: 'contact', ellipsis: true },
-          { title: 'Local', dataIndex: 'location', ellipsis: true },
-          {
-            title: 'Publicado',
-            dataIndex: 'published',
-            width: 100,
-            render: (p: boolean) => (p ? 'Sim' : 'Não'),
-          },
-          {
-            title: '',
-            key: 'actions',
-            width: 160,
-            render: (_, r) => (
-              <Space>
-                <Button size="small" onClick={() => navigate(`/admin/guia-local/${r.id}`)}>
-                  Editar
-                </Button>
-                <Popconfirm
-                  title="Excluir este cadastro?"
-                  onConfirm={async () => {
-                    try {
-                      await adminDeleteLocal(r.id)
-                      message.success('Removido')
-                      load()
-                    } catch {
-                      message.error('Falha ao excluir')
-                    }
-                  }}
-                >
-                  <Button size="small" danger>
-                    Excluir
-                  </Button>
-                </Popconfirm>
-              </Space>
-            ),
-          },
+      <AdminPageHeader
+        items={[
+          { label: 'Painel', path: '/admin/painel' },
+          { label: 'Guia local' },
         ]}
+        title="Comércios do guia local"
+        description="Cadastros exibidos no site com foto, descrição, contato e localização. Duplo clique numa linha para editar."
+        extra={
+          <Button type="primary" icon={<PlusOutlined />} size="large" onClick={() => navigate('/admin/guia-local/novo')}>
+            Novo comércio
+          </Button>
+        }
       />
+
+      <AdminPanelCard bodyPadding={0}>
+        <Table<AdminLocal>
+          rowKey="id"
+          loading={loading}
+          dataSource={rows}
+          size="middle"
+          pagination={{ pageSize: 10, showSizeChanger: false, hideOnSinglePage: true }}
+          scroll={{ x: 800 }}
+          locale={{
+            emptyText: (
+              <div style={{ padding: '40px 16px' }}>
+                <Typography.Text type="secondary">Nenhum comércio cadastrado.</Typography.Text>
+                <div style={{ marginTop: 12 }}>
+                  <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/admin/guia-local/novo')}>
+                    Adicionar primeiro comércio
+                  </Button>
+                </div>
+              </div>
+            ),
+          }}
+          onRow={(record) => ({
+            onDoubleClick: () => navigate(`/admin/guia-local/${record.id}`),
+          })}
+          columns={[
+            {
+              title: 'Foto',
+              dataIndex: 'imageUrl',
+              width: 96,
+              fixed: 'left',
+              render: (url: string) => (
+                <img
+                  src={publicAssetUrl(url)}
+                  alt=""
+                  style={{
+                    width: 72,
+                    height: 52,
+                    objectFit: 'cover',
+                    borderRadius: 8,
+                    border: '1px solid rgba(0,0,0,0.06)',
+                    display: 'block',
+                  }}
+                />
+              ),
+            },
+            {
+              title: 'Título',
+              dataIndex: 'title',
+              ellipsis: true,
+              render: (text: string) => <Typography.Text strong>{text}</Typography.Text>,
+            },
+            {
+              title: 'Contato',
+              dataIndex: 'contact',
+              ellipsis: true,
+              width: 200,
+              responsive: ['md'],
+            },
+            {
+              title: 'Local',
+              dataIndex: 'location',
+              ellipsis: true,
+              width: 200,
+              responsive: ['lg'],
+            },
+            {
+              title: 'Status',
+              dataIndex: 'published',
+              width: 130,
+              render: (p: boolean) => (
+                <Badge status={p ? 'success' : 'warning'} text={p ? 'Publicado' : 'Rascunho'} />
+              ),
+            },
+            {
+              title: 'Ações',
+              key: 'actions',
+              width: 168,
+              fixed: 'right',
+              render: (_, r) => (
+                <Space size="small">
+                  <Button type="link" size="small" icon={<EditOutlined />} onClick={() => navigate(`/admin/guia-local/${r.id}`)}>
+                    Editar
+                  </Button>
+                  <Popconfirm
+                    title="Excluir este cadastro?"
+                    description="Esta ação não pode ser desfeita."
+                    okText="Excluir"
+                    cancelText="Cancelar"
+                    okButtonProps={{ danger: true }}
+                    onConfirm={async () => {
+                      try {
+                        await adminDeleteLocal(r.id)
+                        message.success('Removido')
+                        load()
+                      } catch {
+                        message.error('Falha ao excluir')
+                      }
+                    }}
+                  >
+                    <Button size="small" danger type="link">
+                      Excluir
+                    </Button>
+                  </Popconfirm>
+                </Space>
+              ),
+            },
+          ]}
+        />
+      </AdminPanelCard>
+      <Typography.Paragraph type="secondary" style={{ marginTop: 12, marginBottom: 0, fontSize: 13 }}>
+        Dica: duplo clique numa linha abre o editor.
+      </Typography.Paragraph>
     </div>
   )
 }
