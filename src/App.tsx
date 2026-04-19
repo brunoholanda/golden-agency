@@ -5,6 +5,7 @@ import {
   FormOutlined,
   InstagramOutlined,
   MailOutlined,
+  YoutubeOutlined,
   MenuOutlined,
   PhoneOutlined,
   WhatsAppOutlined,
@@ -32,6 +33,7 @@ const CONTACT_EMAIL = 'leah@goldenagencia.com'
 const CONTACT_PHONE_TEL = '+19132577256'
 const CONTACT_PHONE_DISPLAY = '(913) 257-7256'
 const INSTAGRAM_LINK = 'https://www.instagram.com/goldenagenciakc/'
+const YOUTUBE_LINK = 'https://www.youtube.com/@GoldenAgenciaKC'
 const PARTNER_FORM_LINK = 'https://forms.gle/To6R3YXWjoiEtcYH7'
 const SITE_URL = 'https://www.goldenagencia.com'
 
@@ -269,6 +271,7 @@ const translations = {
     phoneLabel: 'Telefone / WhatsApp',
     emailLabel: 'E-mail',
     instagramLabel: 'Instagram',
+    youtubeLabel: 'YouTube',
     openMainMenu: 'Abrir menu principal',
     closeMenu: 'Fechar menu',
     mainNavigationAria: 'Navegação principal',
@@ -525,6 +528,7 @@ const translations = {
     phoneLabel: 'Phone / WhatsApp',
     emailLabel: 'E-mail',
     instagramLabel: 'Instagram',
+    youtubeLabel: 'YouTube',
     openMainMenu: 'Open main menu',
     closeMenu: 'Close menu',
     mainNavigationAria: 'Main navigation',
@@ -589,6 +593,14 @@ function HomePreFooter({ t }: { t: Translations }) {
               aria-label={t.instagramLabel}
             >
               <InstagramOutlined />
+            </HomePreFooterSocialButton>
+            <HomePreFooterSocialButton
+              href={YOUTUBE_LINK}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={t.youtubeLabel}
+            >
+              <YoutubeOutlined />
             </HomePreFooterSocialButton>
           </HomePreFooterSocial>
         </Col>
@@ -847,7 +859,7 @@ function ContactPage({ t }: { t: Translations }) {
         ))}
       </ContactTeamList>
       <ContactGrid gutter={[16, 16]}>
-        <Col xs={24} md={8}>
+        <Col xs={24} sm={12} lg={6}>
           <ContactCard>
             <PhoneOutlined />
             <div>
@@ -856,7 +868,7 @@ function ContactPage({ t }: { t: Translations }) {
             </div>
           </ContactCard>
         </Col>
-        <Col xs={24} md={8}>
+        <Col xs={24} sm={12} lg={6}>
           <ContactCard>
             <MailOutlined />
             <div>
@@ -865,14 +877,27 @@ function ContactPage({ t }: { t: Translations }) {
             </div>
           </ContactCard>
         </Col>
-        <Col xs={24} md={8}>
+        <Col xs={24} sm={12} lg={6}>
           <ContactCard>
             <InstagramOutlined />
             <div>
               <Text strong>{t.instagramLabel}</Text>
               <Paragraph>
-                <a href="https://www.instagram.com/goldenagenciakc/" target="_blank" rel="noreferrer">
+                <a href={INSTAGRAM_LINK} target="_blank" rel="noreferrer">
                   @goldenagenciakc
+                </a>
+              </Paragraph>
+            </div>
+          </ContactCard>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <ContactCard>
+            <YoutubeOutlined />
+            <div>
+              <Text strong>{t.youtubeLabel}</Text>
+              <Paragraph>
+                <a href={YOUTUBE_LINK} target="_blank" rel="noreferrer">
+                  @GoldenAgenciaKC
                 </a>
               </Paragraph>
             </div>
@@ -928,11 +953,18 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
         description:
           'Leia conteúdos práticos para brasileiros nos EUA com orientações sobre documentos, prazos, processos e rotina no exterior.',
       },
-      '/contato': {
-        title: `Contato | ${t.siteName}`,
-        description:
-          'Entre em contato com a Golden Agência por WhatsApp, e-mail ou Instagram e receba atendimento rápido para suas necessidades.',
-      },
+      '/contato':
+        language === 'pt-BR'
+          ? {
+              title: `Contato | ${t.siteName}`,
+              description:
+                'Entre em contato com a Golden Agência por WhatsApp, e-mail, Instagram ou YouTube e receba atendimento rápido para suas necessidades.',
+            }
+          : {
+              title: `Contact | ${t.siteName}`,
+              description:
+                'Reach Golden Agency via WhatsApp, email, Instagram, or YouTube for quick help with your needs.',
+            },
       '/guia-local': {
         title: `Guia Local | ${t.siteName}`,
         description:
@@ -1039,7 +1071,7 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
               >
                 {!isCompactHeader ? t.contactCta : null}
               </HeaderContactButton>
-              <HeaderInstagramButton
+              <HeaderSocialIconButton
                 icon={<InstagramOutlined />}
                 aria-label={t.instagramLabel}
                 title={t.instagramLabel}
@@ -1047,8 +1079,18 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
                 target="_blank"
                 rel="noreferrer"
               >
-                <InstagramHeaderLabel>{t.instagramLabel}</InstagramHeaderLabel>
-              </HeaderInstagramButton>
+                <SocialHeaderLabel>{t.instagramLabel}</SocialHeaderLabel>
+              </HeaderSocialIconButton>
+              <HeaderSocialIconButton
+                icon={<YoutubeOutlined />}
+                aria-label={t.youtubeLabel}
+                title={t.youtubeLabel}
+                href={YOUTUBE_LINK}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <SocialHeaderLabel>{t.youtubeLabel}</SocialHeaderLabel>
+              </HeaderSocialIconButton>
             </TopActions>
             <MobileMenuButton
               type="text"
@@ -1437,7 +1479,7 @@ const HeaderContactButton = styled(Button)`
   }
 `
 
-const HeaderInstagramButton = styled(Button)`
+const HeaderSocialIconButton = styled(Button)`
   && {
     flex-shrink: 0;
   }
@@ -1452,7 +1494,7 @@ const HeaderInstagramButton = styled(Button)`
   }
 `
 
-const InstagramHeaderLabel = styled.span`
+const SocialHeaderLabel = styled.span`
   @media (max-width: 900px) {
     display: none;
   }
