@@ -1,6 +1,8 @@
 import {
   ArrowRightOutlined,
   CheckCircleOutlined,
+  EnvironmentOutlined,
+  FormOutlined,
   InstagramOutlined,
   MailOutlined,
   MenuOutlined,
@@ -17,7 +19,7 @@ import { BlogPage } from './pages/BlogPage'
 import { BlogPostPage } from './pages/BlogPostPage'
 import { LocalBusinessPage } from './pages/LocalBusinessPage'
 import { LocalGuidePage } from './pages/LocalGuidePage'
-import logo2Webp from './assets/logo-modern-2.webp'
+import logo2Webp from './assets/golden-logo.webp'
 import teamHianiWebp from './assets/team/hiani.webp'
 import teamLeahWebp from './assets/team/leah.webp'
 import teamNayWebp from './assets/team/nay.webp'
@@ -26,14 +28,18 @@ const { Header, Content, Footer } = Layout
 const { Title, Paragraph, Text } = Typography
 const WHATSAPP_LINK = 'https://wa.me/19132577256'
 const MAILTO_LINK = 'mailto:leah@goldenagencia.com'
+const CONTACT_EMAIL = 'leah@goldenagencia.com'
+const CONTACT_PHONE_TEL = '+19132577256'
+const CONTACT_PHONE_DISPLAY = '(913) 257-7256'
 const INSTAGRAM_LINK = 'https://www.instagram.com/goldenagenciakc/'
+const PARTNER_FORM_LINK = 'https://forms.gle/To6R3YXWjoiEtcYH7'
 const SITE_URL = 'https://www.goldenagencia.com'
 
 type Language = 'pt-BR' | 'en'
 
 const translations = {
   'pt-BR': {
-    siteName: 'Agência KC',
+    siteName: 'Golden Agência KC',
     siteTagline: 'Descomplicando a vida do imigrante brasileiro',
     contactCta: 'Fale conosco',
     nav: {
@@ -102,6 +108,27 @@ const translations = {
           'Organização digital de documentos',
           'Atendimento para pequenas empresas e emissão de faturas',
         ],
+      },
+    ],
+    additionalServicesTitle: 'Serviços adicionais',
+    additionalServicesDesc:
+      'Complemente seu atendimento com tradução, apoio presencial e encaminhamento para parceiros contábeis e jurídicos.',
+    additionalServices: [
+      {
+        title: 'Tradução',
+        items: ['Tradução de documentos e textos conforme sua necessidade — consulte prazos e valores.'],
+      },
+      {
+        title: 'Auxílio presencial',
+        items: ['Acompanhamento presencial em trâmites, visitas e atendimentos que exigem sua presença.'],
+      },
+      {
+        title: 'Contato para serviços contábeis',
+        items: ['Orientação e encaminhamento para profissionais contábeis parceiros.'],
+      },
+      {
+        title: 'Contato para serviços jurídicos',
+        items: ['Orientação e encaminhamento para assessoria jurídica quando necessário.'],
       },
     ],
     pricingTitle: 'Preços',
@@ -219,6 +246,7 @@ const translations = {
       'Ao listar sua empresa ou sua organização em nossa plataforma, você não apenas amplia a visibilidade de seu negócio, mas também contribui diretamente para o fortalecimento e o desenvolvimento socioeconômico da nossa comunidade na região.',
     partnerDesc4:
       'Preencha o formulário abaixo e em breve nossa equipe entrará em contato com você.',
+    partnerFormButton: 'Preencher formulário',
     partnerDesc5: 'Obrigado por fortalecer nossa comunidade.',
     aboutTitle: 'Sobre a Golden',
     aboutDesc:
@@ -245,7 +273,7 @@ const translations = {
     closeMenu: 'Fechar menu',
     mainNavigationAria: 'Navegação principal',
     drawerLanguageHeading: 'Idioma do site',
-    teamTitle: 'Minha equipe',
+    teamTitle: 'Sobre nós',
     teamDescription:
       'Pessoas que tornam o atendimento da Golden Agência acolhedor, humano e eficiente.',
     teamMembers: [
@@ -265,6 +293,11 @@ const translations = {
         role: 'Assistente Virtual',
       },
     ],
+    homePreFooterDesc:
+      'Apoiamos brasileiros nos EUA com atendimento em português: documentos, agendamentos, aplicações, assistência virtual e suporte no dia a dia na região.',
+    homePreFooterQuickLinks: 'Links rápidos',
+    homePreFooterContactHeading: 'Fale conosco',
+    homePreFooterLocation: 'Overland Park, Kansas · Estados Unidos',
     privacyFooterLink: 'Política de Privacidade',
     adminFooterLink: 'Painel (gestores)',
     editContentInPanel: 'Editar no painel',
@@ -340,6 +373,27 @@ const translations = {
           'Digital document organization',
           'Small business support and invoice issuance',
         ],
+      },
+    ],
+    additionalServicesTitle: 'Additional services',
+    additionalServicesDesc:
+      'Add translation, in-person support, and referrals to trusted accounting and legal partners.',
+    additionalServices: [
+      {
+        title: 'Translation',
+        items: ['Document and text translation tailored to your needs — ask for timelines and rates.'],
+      },
+      {
+        title: 'In-person assistance',
+        items: ['On-site support for errands, visits, and appointments that require you to be there in person.'],
+      },
+      {
+        title: 'Contact for accounting services',
+        items: ['Guidance and referrals to partner accounting professionals.'],
+      },
+      {
+        title: 'Contact for legal services',
+        items: ['Guidance and referrals to legal counsel when appropriate.'],
       },
     ],
     pricingTitle: 'Pricing',
@@ -451,6 +505,7 @@ const translations = {
       'By listing your business or organization on our platform, you not only increase your brand visibility, but also directly contribute to strengthening and supporting the socioeconomic development of our community in the region.',
     partnerDesc4:
       'Fill out the form below and our team will contact you shortly.',
+    partnerFormButton: 'Fill out the form',
     partnerDesc5: 'Thank you for strengthening our community.',
     aboutTitle: 'About Golden',
     aboutDesc:
@@ -474,7 +529,7 @@ const translations = {
     closeMenu: 'Close menu',
     mainNavigationAria: 'Main navigation',
     drawerLanguageHeading: 'Site language',
-    teamTitle: 'Our team',
+    teamTitle: 'About us',
     teamDescription:
       'The people who make Golden Agency support welcoming, human, and efficient.',
     teamMembers: [
@@ -494,6 +549,11 @@ const translations = {
         role: 'Virtual Assistant',
       },
     ],
+    homePreFooterDesc:
+      'We support Brazilians in the U.S. with Portuguese-language help: documents, scheduling, applications, virtual assistance, and everyday support in the region.',
+    homePreFooterQuickLinks: 'Quick links',
+    homePreFooterContactHeading: 'Get in touch',
+    homePreFooterLocation: 'Kansas City, Kansas · United States',
     privacyFooterLink: 'Privacy Policy',
     adminFooterLink: 'Staff dashboard',
     editContentInPanel: 'Edit in dashboard',
@@ -512,6 +572,70 @@ const navigationItems = [
   { path: '/guia-local', key: 'localGuide' as const },
   { path: '/parceiro', key: 'partner' as const },
 ]
+
+function HomePreFooter({ t }: { t: Translations }) {
+  return (
+    <HomePreFooterSection>
+      <Row gutter={[32, 32]}>
+        <Col xs={24} lg={8}>
+          <HomePreFooterBrand>{t.siteName}</HomePreFooterBrand>
+          <HomePreFooterTagline>{t.siteTagline}</HomePreFooterTagline>
+          <HomePreFooterBlurb>{t.homePreFooterDesc}</HomePreFooterBlurb>
+          <HomePreFooterSocial>
+            <HomePreFooterSocialButton
+              href={INSTAGRAM_LINK}
+              target="_blank"
+              rel="noreferrer"
+              aria-label={t.instagramLabel}
+            >
+              <InstagramOutlined />
+            </HomePreFooterSocialButton>
+          </HomePreFooterSocial>
+        </Col>
+        <Col xs={24} lg={8}>
+          <HomePreFooterColTitle>{t.homePreFooterQuickLinks}</HomePreFooterColTitle>
+          <HomePreFooterLinkList>
+            {navigationItems.map((item) => (
+              <li key={item.path}>
+                <HomePreFooterNavLink to={item.path} end={item.path === '/'}>
+                  {t.nav[item.key]}
+                </HomePreFooterNavLink>
+              </li>
+            ))}
+            <li key="/politica-de-privacidade">
+              <HomePreFooterNavLink to="/politica-de-privacidade">{t.privacyFooterLink}</HomePreFooterNavLink>
+            </li>
+          </HomePreFooterLinkList>
+        </Col>
+        <Col xs={24} lg={8}>
+          <HomePreFooterColTitle>{t.homePreFooterContactHeading}</HomePreFooterColTitle>
+          <HomePreFooterContactList>
+            <HomePreFooterContactRow>
+              <HomePreFooterContactIcon>
+                <MailOutlined />
+              </HomePreFooterContactIcon>
+              <HomePreFooterContactLink href={MAILTO_LINK}>{CONTACT_EMAIL}</HomePreFooterContactLink>
+            </HomePreFooterContactRow>
+            <HomePreFooterContactRow>
+              <HomePreFooterContactIcon>
+                <PhoneOutlined />
+              </HomePreFooterContactIcon>
+              <HomePreFooterContactLink href={`tel:${CONTACT_PHONE_TEL}`}>
+                {CONTACT_PHONE_DISPLAY}
+              </HomePreFooterContactLink>
+            </HomePreFooterContactRow>
+            <HomePreFooterContactRow>
+              <HomePreFooterContactIcon>
+                <EnvironmentOutlined />
+              </HomePreFooterContactIcon>
+              <HomePreFooterContactText>{t.homePreFooterLocation}</HomePreFooterContactText>
+            </HomePreFooterContactRow>
+          </HomePreFooterContactList>
+        </Col>
+      </Row>
+    </HomePreFooterSection>
+  )
+}
 
 const MOBILE_HEADER_QUERY = '(max-width: 900px)'
 
@@ -559,21 +683,11 @@ function HomePage({ t }: { t: Translations }) {
 
       <Section>
         <SectionTitle level={2}>{t.aboutTitle}</SectionTitle>
-        <Paragraph>{t.aboutDesc}</Paragraph>
-        <Row gutter={[16, 16]}>
-          <Col xs={24} md={12}>
-            <InfoCard>
-              <Title level={4}>{t.objectiveTitle}</Title>
-              <Paragraph>{t.objectiveDesc}</Paragraph>
-            </InfoCard>
-          </Col>
-          <Col xs={24} md={12}>
-            <InfoCard>
-              <Title level={4}>{t.purposeTitle}</Title>
-              <Paragraph>{t.purposeDesc}</Paragraph>
-            </InfoCard>
-          </Col>
-        </Row>
+        <Paragraph style={{ marginBottom: 0 }}>{t.aboutDesc}</Paragraph>
+        <AboutSubheading level={2}>{t.objectiveTitle}</AboutSubheading>
+        <Paragraph style={{ marginTop: '0.35rem', marginBottom: 0 }}>{t.objectiveDesc}</Paragraph>
+        <AboutSubheadingTightTop level={2}>{t.purposeTitle}</AboutSubheadingTightTop>
+        <Paragraph style={{ marginTop: '0.35rem', marginBottom: 0 }}>{t.purposeDesc}</Paragraph>
       </Section>
 
       <Section>
@@ -592,30 +706,53 @@ function HomePage({ t }: { t: Translations }) {
           ))}
         </Row>
       </Section>
+
+      <HomePreFooter t={t} />
     </PageStack>
   )
 }
 
 function ServicesPage({ t }: { t: Translations }) {
   return (
-    <Section>
-      <SectionTitle level={2}>{t.servicesTitle}</SectionTitle>
-      <Paragraph>{t.servicesDesc}</Paragraph>
-      <Row gutter={[16, 16]}>
-        {t.services.map((service) => (
-          <Col xs={24} sm={12} lg={8} key={service.title}>
-            <ServiceCard title={service.title}>
-              {service.items.map((item) => (
-                <ServiceItem key={item}>
-                  <CheckCircleOutlined />
-                  <span>{item}</span>
-                </ServiceItem>
-              ))}
-            </ServiceCard>
-          </Col>
-        ))}
-      </Row>
-    </Section>
+    <PageStack>
+      <Section>
+        <SectionTitle level={2}>{t.servicesTitle}</SectionTitle>
+        <Paragraph>{t.servicesDesc}</Paragraph>
+        <Row gutter={[16, 16]}>
+          {t.services.map((service) => (
+            <Col xs={24} sm={12} lg={8} key={service.title}>
+              <ServiceCard title={service.title}>
+                {service.items.map((item) => (
+                  <ServiceItem key={item}>
+                    <CheckCircleOutlined />
+                    <span>{item}</span>
+                  </ServiceItem>
+                ))}
+              </ServiceCard>
+            </Col>
+          ))}
+        </Row>
+      </Section>
+
+      <Section>
+        <SectionTitle level={2}>{t.additionalServicesTitle}</SectionTitle>
+        <Paragraph>{t.additionalServicesDesc}</Paragraph>
+        <Row gutter={[16, 16]}>
+          {t.additionalServices.map((service) => (
+            <Col xs={24} sm={12} lg={12} key={service.title}>
+              <ServiceCard title={service.title}>
+                {service.items.map((item) => (
+                  <ServiceItem key={item}>
+                    <CheckCircleOutlined />
+                    <span>{item}</span>
+                  </ServiceItem>
+                ))}
+              </ServiceCard>
+            </Col>
+          ))}
+        </Row>
+      </Section>
+    </PageStack>
   )
 }
 
@@ -659,6 +796,18 @@ function PartnerPage({ t }: { t: Translations }) {
       <Paragraph>{t.partnerDesc2}</Paragraph>
       <Paragraph>{t.partnerDesc3}</Paragraph>
       <Paragraph>{t.partnerDesc4}</Paragraph>
+      <Space style={{ marginTop: 4, marginBottom: 8 }}>
+        <Button
+          type="primary"
+          size="large"
+          icon={<FormOutlined />}
+          href={PARTNER_FORM_LINK}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {t.partnerFormButton}
+        </Button>
+      </Space>
       <Paragraph>{t.partnerDesc5}</Paragraph>
     </Section>
   )
@@ -703,7 +852,7 @@ function ContactPage({ t }: { t: Translations }) {
             <PhoneOutlined />
             <div>
               <Text strong>{t.phoneLabel}</Text>
-              <Paragraph>(913) 257-7256</Paragraph>
+              <Paragraph>{CONTACT_PHONE_DISPLAY}</Paragraph>
             </div>
           </ContactCard>
         </Col>
@@ -712,7 +861,7 @@ function ContactPage({ t }: { t: Translations }) {
             <MailOutlined />
             <div>
               <Text strong>{t.emailLabel}</Text>
-              <Paragraph>leah@goldenagencia.com</Paragraph>
+              <Paragraph>{CONTACT_EMAIL}</Paragraph>
             </div>
           </ContactCard>
         </Col>
@@ -1447,6 +1596,21 @@ const SectionTitle = styled(Title)`
   }
 `
 
+/** Same typography as section headings (e.g. “Sobre a Golden”), with tighter stack inside the about block. */
+const AboutSubheading = styled(SectionTitle)`
+  && {
+    margin-top: 1.1rem;
+    margin-bottom: 0;
+  }
+`
+
+const AboutSubheadingTightTop = styled(SectionTitle)`
+  && {
+    margin-top: 0.35rem;
+    margin-bottom: 0;
+  }
+`
+
 const ServiceCard = styled(Card)`
   height: 100%;
   border-radius: 12px;
@@ -1495,11 +1659,6 @@ const ServiceItem = styled.div`
     color: #1a8f43;
     margin-top: 3px;
   }
-`
-
-const InfoCard = styled(Card)`
-  height: 100%;
-  border-radius: 12px;
 `
 
 const TeamCard = styled(Card)`
@@ -1552,6 +1711,143 @@ const ContactCard = styled(Card)`
 
 const PrivacyBlock = styled.div`
   margin-top: 20px;
+`
+
+const HomePreFooterSection = styled.section`
+  background: linear-gradient(180deg, #0a1628 0%, #0f2742 100%);
+  color: rgba(255, 255, 255, 0.88);
+  border-radius: 16px;
+  padding: clamp(28px, 4vw, 44px) clamp(20px, 4vw, 40px);
+  box-shadow: 0 8px 24px rgba(16, 42, 67, 0.12);
+`
+
+const HomePreFooterBrand = styled.span`
+  display: block;
+  font-size: clamp(1.25rem, 3vw, 1.5rem);
+  font-weight: 800;
+  color: #e8a43d;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+`
+
+const HomePreFooterTagline = styled.p`
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.45;
+`
+
+const HomePreFooterBlurb = styled.p`
+  margin: 0 0 20px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 380px;
+`
+
+const HomePreFooterSocial = styled.div`
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+`
+
+const HomePreFooterSocialButton = styled.a`
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 18px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  text-decoration: none !important;
+
+  &:hover {
+    background: rgba(232, 164, 61, 0.28);
+    color: #ffffff !important;
+    transform: translateY(-2px);
+  }
+`
+
+const HomePreFooterColTitle = styled.h3`
+  margin: 0 0 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+`
+
+const HomePreFooterLinkList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`
+
+const HomePreFooterNavLink = styled(NavLink)`
+  color: rgba(255, 255, 255, 0.86);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 5px 0;
+  display: inline-block;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+
+  &.active {
+    color: #e8a43d;
+  }
+`
+
+const HomePreFooterContactList = styled.ul`
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+`
+
+const HomePreFooterContactRow = styled.li`
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+`
+
+const HomePreFooterContactIcon = styled.span`
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e8a43d;
+  font-size: 16px;
+  margin-top: 2px;
+`
+
+const HomePreFooterContactLink = styled.a`
+  color: #8ec5ff;
+  text-decoration: underline;
+  font-size: 0.95rem;
+  word-break: break-word;
+
+  &:hover {
+    color: #b8d9ff;
+  }
+`
+
+const HomePreFooterContactText = styled.span`
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.95rem;
+  line-height: 1.45;
 `
 
 const PageFooter = styled(Footer)`
