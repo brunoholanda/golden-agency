@@ -10,6 +10,7 @@ import {
   adminUpdateBlog,
   adminUploadImage,
 } from '../api/adminApi'
+import { AdminImageCropModal } from './AdminImageCropModal'
 import { publicAssetUrl } from '../util/publicAssetUrl'
 import { AdminFieldLabel, AdminPageHeader, AdminPanelCard } from './AdminPageChrome'
 
@@ -24,6 +25,8 @@ export function AdminBlogEditor() {
   const [tags, setTags] = useState<string[]>([])
   const [published, setPublished] = useState(true)
   const [uploading, setUploading] = useState(false)
+  const [cropOpen, setCropOpen] = useState(false)
+  const [pendingImage, setPendingImage] = useState<File | null>(null)
   const [saving, setSaving] = useState(false)
   const [loading, setLoading] = useState(!isCreate)
 
@@ -91,7 +94,7 @@ export function AdminBlogEditor() {
           { label: isCreate ? 'Novo artigo' : 'Editar' },
         ]}
         title={isCreate ? 'Novo artigo' : 'Editar artigo'}
-        description="Imagem de capa otimizada no envio (até ~300 KB). Até 5 tags e corpo em Markdown."
+        description="Imagem de capa com recorte otimizado (800x445) e compressão agressiva para até 50 KB. Até 5 tags e corpo em Markdown."
         extra={
           <Button icon={<ArrowLeftOutlined />} size="large" onClick={() => navigate('/admin/blog')}>
             Voltar à lista
@@ -116,7 +119,7 @@ export function AdminBlogEditor() {
           <div>
             <AdminFieldLabel>Imagem de capa</AdminFieldLabel>
             <Typography.Paragraph type="secondary" style={{ marginTop: 0, marginBottom: 10, fontSize: 13 }}>
-              Uma imagem por artigo. Formatos: JPEG, PNG, WebP ou GIF.
+              Uma imagem por artigo. Formatos: JPEG, PNG, WebP ou GIF. Após selecionar, o sistema abre recorte em 800x445.
             </Typography.Paragraph>
             <div
               style={{
@@ -129,17 +132,9 @@ export function AdminBlogEditor() {
               <Upload
                 accept="image/jpeg,image/png,image/webp,image/gif"
                 showUploadList={false}
-                beforeUpload={async (file) => {
-                  setUploading(true)
-                  try {
-                    const url = await adminUploadImage(file)
-                    setImageUrl(url)
-                    message.success('Imagem enviada')
-                  } catch {
-                    message.error('Falha no upload')
-                  } finally {
-                    setUploading(false)
-                  }
+                beforeUpload={(file) => {
+                  setPendingImage(file)
+                  setCropOpen(true)
                   return false
                 }}
               >
@@ -214,6 +209,29 @@ export function AdminBlogEditor() {
           </Flex>
         </Space>
       </AdminPanelCard>
+      <AdminImageCropModal
+        open={cropOpen}
+        file={pendingImage}
+        title="Recortar capa do artigo"
+        onCancel={() => {
+          setCropOpen(false)
+          setPendingImage(null)
+        }}
+        onConfirm={async (croppedFile) => {
+          setUploading(true)
+          try {
+            const url = await adminUploadImage(croppedFile)
+            setImageUrl(url)
+            message.success('Imagem enviada e otimizada')
+            setCropOpen(false)
+            setPendingImage(null)
+          } catch {
+            message.error('Falha no upload')
+          } finally {
+            setUploading(false)
+          }
+        }}
+      />
     </div>
   )
 }

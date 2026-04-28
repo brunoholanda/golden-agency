@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AdminBlogEditor } from './AdminBlogEditor'
 import { AdminBlogList } from './AdminBlogList'
 import { AdminDashboard } from './AdminDashboard'
+import { AdminLocalCategories } from './AdminLocalCategories'
 import { AdminLocalEditor } from './AdminLocalEditor'
 import { AdminLocalList } from './AdminLocalList'
 import { AdminLogin } from './AdminLogin'
@@ -20,6 +21,7 @@ export function AdminRoutes() {
           <Route path="blog" element={<AdminBlogList />} />
           <Route path="guia-local/novo" element={<AdminLocalEditor />} />
           <Route path="guia-local/:id" element={<AdminLocalEditor />} />
+          <Route path="guia-local/categorias" element={<AdminLocalCategories />} />
           <Route path="guia-local" element={<AdminLocalList />} />
         </Route>
       </Route>

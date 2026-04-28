@@ -1,21 +1,29 @@
-import { Alert, Card, List, Spin, Typography } from 'antd'
+import { Alert, Button, Card, Grid, List, Select, Space, Spin, Typography } from 'antd'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { fetchLocalBusinesses, type LocalBusinessItem } from '../api/publicContent'
+import { Link, useSearchParams } from 'react-router-dom'
+import { fetchLocalBusinessCategories, fetchLocalBusinesses, type LocalBusinessItem } from '../api/publicContent'
 import { PageSection, PageSectionTitle } from '../components/PageSection'
 import { publicAssetUrl } from '../util/publicAssetUrl'
 
 const { Paragraph } = Typography
+const { useBreakpoint } = Grid
 
 type T = { localGuideTitle: string; localGuideDesc: string }
 
 export function LocalGuidePage({ t }: { t: T }) {
+  const screens = useBreakpoint()
+  const isMobile = !screens.md
+  const [searchParams, setSearchParams] = useSearchParams()
+  const selectedCategory = searchParams.get('categoria') || undefined
   const [items, setItems] = useState<LocalBusinessItem[] | null>(null)
+  const [categories, setCategories] = useState<string[]>([])
   const [err, setErr] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
-    fetchLocalBusinesses()
+    setErr(null)
+    setItems(null)
+    fetchLocalBusinesses(selectedCategory)
       .then((data) => {
         if (!cancelled) setItems(data)
       })
@@ -25,12 +33,61 @@ export function LocalGuidePage({ t }: { t: T }) {
     return () => {
       cancelled = true
     }
+  }, [selectedCategory])
+
+  useEffect(() => {
+    let cancelled = false
+    fetchLocalBusinessCategories()
+      .then((data) => {
+        if (!cancelled) setCategories(data)
+      })
+      .catch(() => {
+        if (!cancelled) setCategories([])
+      })
+    return () => {
+      cancelled = true
+    }
   }, [])
+
+  const categoryOptions = categories.map((value) => ({ label: value, value }))
+  const setCategoryFilter = (value?: string) => {
+    const next = new URLSearchParams(searchParams)
+    if (value) next.set('categoria', value)
+    else next.delete('categoria')
+    setSearchParams(next, { replace: true })
+  }
 
   return (
     <PageSection>
       <PageSectionTitle level={2}>{t.localGuideTitle}</PageSectionTitle>
       <Paragraph>{t.localGuideDesc}</Paragraph>
+      {isMobile ? (
+        <Space direction="vertical" size={4} style={{ marginTop: 8 }}>
+          <Typography.Text strong>Filtrar por categoria</Typography.Text>
+          <Select
+            allowClear
+            placeholder="Todas as categorias"
+            value={selectedCategory}
+            options={categoryOptions}
+            style={{ minWidth: 260 }}
+            onChange={(value) => setCategoryFilter(value)}
+          />
+        </Space>
+      ) : (
+        <Space direction="vertical" size={8} style={{ marginTop: 8, width: '100%' }}>
+          <Typography.Text strong>Categorias</Typography.Text>
+          <Space wrap size={[8, 8]}>
+            <Button type={selectedCategory ? 'default' : 'primary'} onClick={() => setCategoryFilter(undefined)}>
+              Todas
+            </Button>
+            {categories.map((cat) => (
+              <Button key={cat} type={selectedCategory === cat ? 'primary' : 'default'} onClick={() => setCategoryFilter(cat)}>
+                {cat}
+              </Button>
+            ))}
+          </Space>
+        </Space>
+      )}
       {err && <Alert type="error" message={err} style={{ marginTop: 16 }} showIcon />}
       {items === null && <Spin style={{ display: 'block', marginTop: 24 }} />}
       {items && items.length === 0 && (
@@ -41,7 +98,7 @@ export function LocalGuidePage({ t }: { t: T }) {
       {items && items.length > 0 && (
         <List
           style={{ marginTop: 16 }}
-          grid={{ gutter: 16, xs: 1, sm: 2, md: 2, lg: 3 }}
+          grid={{ gutter: 16, xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}
           dataSource={items}
           renderItem={(biz) => (
             <List.Item key={biz.id}>
@@ -52,7 +109,7 @@ export function LocalGuidePage({ t }: { t: T }) {
                     <img
                       alt=""
                       src={publicAssetUrl(biz.imageUrl)}
-                      style={{ height: 180, objectFit: 'cover', width: '100%' }}
+                      style={{ height: 220, objectFit: 'cover', width: '100%' }}
                     />
                   </Link>
                 }

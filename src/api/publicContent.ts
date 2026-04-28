@@ -27,6 +27,12 @@ export type LocalBusinessItem = {
   imageUrl: string
   contact: string
   location: string
+  category: string | null
+  email: string | null
+  instagram: string | null
+  facebook: string | null
+  site: string | null
+  youtube: string | null
   createdAt: string
 }
 
@@ -40,8 +46,14 @@ export async function fetchBlogPost(slug: string): Promise<BlogDetail> {
   return data
 }
 
-export async function fetchLocalBusinesses(): Promise<LocalBusinessItem[]> {
-  const { data } = await http.get<LocalBusinessItem[]>('/local-guide')
+export async function fetchLocalBusinesses(category?: string): Promise<LocalBusinessItem[]> {
+  const params = category ? { category } : undefined
+  const { data } = await http.get<LocalBusinessItem[]>('/local-guide', { params })
+  return data
+}
+
+export async function fetchLocalBusinessCategories(): Promise<string[]> {
+  const { data } = await http.get<string[]>('/local-guide/categories')
   return data
 }
 

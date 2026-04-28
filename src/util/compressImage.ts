@@ -1,7 +1,7 @@
 import imageCompression from 'browser-image-compression'
 
-/** Limite máximo (~300 KiB). Não ultrapassa este tamanho após a compressão. */
-const MAX_BYTES = 300 * 1024
+/** Limite padrão agressivo para capas otimizadas. */
+const DEFAULT_MAX_BYTES = 50 * 1024
 
 function canvasSupportsWebp(): boolean {
   try {
@@ -25,21 +25,27 @@ function asUploadFile(blob: File, originalName: string, mime: string): File {
   })
 }
 
+export type CompressImageOptions = {
+  maxBytes?: number
+  maxWidthOrHeight?: number
+}
+
 /**
  * Reduz dimensão e peso antes do upload (no navegador).
- * Saída em WebP (se suportado) ou JPEG, sempre ≤ 300 KiB quando possível.
+ * Saída em WebP (se suportado) ou JPEG, tentando o menor KB possível dentro do limite.
  */
-export async function compressImageFile(file: File): Promise<File> {
+export async function compressImageFile(file: File, options: CompressImageOptions = {}): Promise<File> {
   if (!file.type.startsWith('image/') || file.type === 'image/svg+xml') {
     return file
   }
 
+  const maxBytes = options.maxBytes ?? DEFAULT_MAX_BYTES
   const outputMime = canvasSupportsWebp() ? 'image/webp' : 'image/jpeg'
-  const maxSizeMB = MAX_BYTES / (1024 * 1024)
+  const maxSizeMB = maxBytes / (1024 * 1024)
 
   let input: File = file
-  let maxSide = 1920
-  let initialQuality = 0.9
+  let maxSide = options.maxWidthOrHeight ?? 800
+  let initialQuality = 0.82
 
   for (let round = 0; round < 10; round++) {
     const compressed = await imageCompression(input, {
@@ -52,32 +58,32 @@ export async function compressImageFile(file: File): Promise<File> {
     })
 
     const out = asUploadFile(compressed, file.name, outputMime)
-    if (out.size <= MAX_BYTES) {
+    if (out.size <= maxBytes) {
       return out
     }
 
     input = out
-    maxSide = Math.max(560, Math.floor(maxSide * 0.78))
-    initialQuality = Math.max(0.58, initialQuality - 0.07)
+    maxSide = Math.max(320, Math.floor(maxSide * 0.86))
+    initialQuality = Math.max(0.4, initialQuality - 0.06)
   }
 
   let last = await imageCompression(input, {
     maxSizeMB,
-    maxWidthOrHeight: 520,
+    maxWidthOrHeight: 320,
     useWebWorker: true,
     maxIteration: 45,
-    initialQuality: 0.52,
+    initialQuality: 0.38,
     fileType: outputMime,
   })
   last = asUploadFile(last, file.name, outputMime)
 
-  for (let w = 420; last.size > MAX_BYTES && w >= 160; w -= 40) {
+  for (let w = 300; last.size > maxBytes && w >= 120; w -= 20) {
     const again = await imageCompression(last, {
       maxSizeMB,
       maxWidthOrHeight: w,
       useWebWorker: true,
       maxIteration: 50,
-      initialQuality: 0.45,
+      initialQuality: 0.32,
       fileType: outputMime,
     })
     last = asUploadFile(again, file.name, outputMime)

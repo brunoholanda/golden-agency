@@ -20,7 +20,20 @@ export type AdminLocal = {
   imageUrl: string
   contact: string
   location: string
+  category: string | null
+  email: string | null
+  instagram: string | null
+  facebook: string | null
+  site: string | null
+  youtube: string | null
   published: boolean
+  createdAt: string
+  updatedAt: string
+}
+
+export type AdminLocalCategory = {
+  id: string
+  name: string
   createdAt: string
   updatedAt: string
 }
@@ -34,7 +47,7 @@ export async function adminLogin(email: string, password: string) {
 }
 
 export async function adminUploadImage(file: File) {
-  const compressed = await compressImageFile(file)
+  const compressed = await compressImageFile(file, { maxBytes: 50 * 1024, maxWidthOrHeight: 800 })
   const fd = new FormData()
   fd.append('file', compressed)
   const { data } = await http.post<{ url: string }>('/admin/upload', fd)
@@ -90,6 +103,12 @@ export async function adminCreateLocal(payload: {
   imageUrl: string
   contact: string
   location: string
+  category?: string
+  email?: string
+  instagram?: string
+  facebook?: string
+  site?: string
+  youtube?: string
   published?: boolean
 }) {
   const { data } = await http.post<AdminLocal>('/admin/local-guide', payload)
@@ -98,7 +117,20 @@ export async function adminCreateLocal(payload: {
 
 export async function adminUpdateLocal(
   id: string,
-  payload: Partial<{ title: string; description: string; imageUrl: string; contact: string; location: string; published: boolean }>,
+  payload: Partial<{
+    title: string
+    description: string
+    imageUrl: string
+    contact: string
+    location: string
+    category: string
+    email: string
+    instagram: string
+    facebook: string
+    site: string
+    youtube: string
+    published: boolean
+  }>,
 ) {
   const { data } = await http.patch<AdminLocal>(`/admin/local-guide/${id}`, payload)
   return data
@@ -106,4 +138,19 @@ export async function adminUpdateLocal(
 
 export async function adminDeleteLocal(id: string) {
   await http.delete(`/admin/local-guide/${id}`)
+}
+
+export async function adminListLocalCategories() {
+  const { data } = await http.get<AdminLocalCategory[]>('/admin/local-guide/categories')
+  return data
+}
+
+export async function adminCreateLocalCategory(payload: { name: string }) {
+  const { data } = await http.post<AdminLocalCategory>('/admin/local-guide/categories', payload)
+  return data
+}
+
+export async function adminUpdateLocalCategory(id: string, payload: { name: string }) {
+  const { data } = await http.patch<AdminLocalCategory>(`/admin/local-guide/categories/${encodeURIComponent(id)}`, payload)
+  return data
 }

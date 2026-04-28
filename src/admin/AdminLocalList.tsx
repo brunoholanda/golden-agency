@@ -31,11 +31,16 @@ export function AdminLocalList() {
           { label: 'Guia local' },
         ]}
         title="Comércios do guia local"
-        description="Cadastros exibidos no site com foto, descrição, contato e localização. Duplo clique numa linha para editar."
+        description="Cadastros exibidos no site com foto, categoria, descrição, contato e localização. Duplo clique numa linha para editar."
         extra={
-          <Button type="primary" icon={<PlusOutlined />} size="large" onClick={() => navigate('/admin/guia-local/novo')}>
-            Novo comércio
-          </Button>
+          <Space>
+            <Button size="large" onClick={() => navigate('/admin/guia-local/categorias')}>
+              Categorias
+            </Button>
+            <Button type="primary" icon={<PlusOutlined />} size="large" onClick={() => navigate('/admin/guia-local/novo')}>
+              Novo comércio
+            </Button>
+          </Space>
         }
       />
 
@@ -95,6 +100,14 @@ export function AdminLocalList() {
               ellipsis: true,
               width: 200,
               responsive: ['md'],
+            },
+            {
+              title: 'Categoria',
+              dataIndex: 'category',
+              width: 180,
+              ellipsis: true,
+              responsive: ['md'],
+              render: (value: string | null) => value || <Typography.Text type="secondary">Sem categoria</Typography.Text>,
             },
             {
               title: 'Local',
