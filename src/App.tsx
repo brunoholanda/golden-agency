@@ -21,6 +21,7 @@ import { BlogPage } from './pages/BlogPage'
 import { BlogPostPage } from './pages/BlogPostPage'
 import { LocalBusinessPage } from './pages/LocalBusinessPage'
 import { LocalGuidePage } from './pages/LocalGuidePage'
+import { applySeo, clearDynamicJsonLd } from './seo/seo'
 import logo2Webp from './assets/golden-logo.webp'
 import teamHianiWebp from './assets/team/hiani.webp'
 import teamLeahWebp from './assets/team/leah.webp'
@@ -731,7 +732,7 @@ function ServicesPage({ t }: { t: Translations }) {
   return (
     <PageStack>
       <Section>
-        <SectionTitle level={2}>{t.servicesTitle}</SectionTitle>
+        <SectionTitle level={1}>{t.servicesTitle}</SectionTitle>
         <Paragraph>{t.servicesDesc}</Paragraph>
         <Row gutter={[16, 16]}>
           {t.services.map((service) => (
@@ -774,7 +775,7 @@ function ServicesPage({ t }: { t: Translations }) {
 function PricingPage({ t }: { t: Translations }) {
   return (
     <Section>
-      <SectionTitle level={2}>{t.pricingTitle}</SectionTitle>
+      <SectionTitle level={1}>{t.pricingTitle}</SectionTitle>
       <Paragraph>{t.pricingDesc}</Paragraph>
       <Row gutter={[16, 16]}>
         {t.pricingBoards.map((board) => (
@@ -805,7 +806,7 @@ function PricingPage({ t }: { t: Translations }) {
 function PartnerPage({ t }: { t: Translations }) {
   return (
     <Section>
-      <SectionTitle level={2}>{t.partnerTitle}</SectionTitle>
+      <SectionTitle level={1}>{t.partnerTitle}</SectionTitle>
       <Title level={4}>{t.partnerHighlight}</Title>
       <Paragraph>{t.partnerDesc}</Paragraph>
       <Paragraph>{t.partnerDesc2}</Paragraph>
@@ -833,7 +834,7 @@ function PrivacyPage({ language }: { language: Language }) {
 
   return (
     <Section>
-      <SectionTitle level={2}>{content.title}</SectionTitle>
+      <SectionTitle level={1}>{content.title}</SectionTitle>
       <Text type="secondary" style={{ display: 'block', marginBottom: 16 }}>
         {content.lastUpdated}
       </Text>
@@ -853,7 +854,7 @@ function PrivacyPage({ language }: { language: Language }) {
 function ContactPage({ t }: { t: Translations }) {
   return (
     <ContactSection>
-      <SectionTitle level={2}>{t.quickContactTitle}</SectionTitle>
+      <SectionTitle level={1}>{t.quickContactTitle}</SectionTitle>
       <Paragraph>{t.quickContactDesc}</Paragraph>
       <Paragraph>{t.quickContactSupportText}</Paragraph>
       <ContactTeamList>
@@ -1036,41 +1037,20 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
 
     const fallbackMeta = metaByPath['/']
     let pageMeta = metaByPath[location.pathname]
-    if (!pageMeta && location.pathname.startsWith('/blog/') && location.pathname !== '/blog') {
-      pageMeta = {
-        title: `Artigo | ${t.siteName}`,
-        description: t.blogDesc,
-      }
-    }
-    if (!pageMeta && location.pathname.startsWith('/guia-local/') && location.pathname !== '/guia-local') {
-      pageMeta = {
-        title: `Guia local | ${t.siteName}`,
-        description: t.localGuideDesc,
-      }
-    }
     if (!pageMeta) pageMeta = fallbackMeta
-    const canonicalUrl = `${SITE_URL}${location.pathname === '/' ? '' : location.pathname}`
 
-    document.title = pageMeta.title
-
-    const setMeta = (selector: string, content: string) => {
-      const element = document.querySelector(selector)
-      if (element) {
-        element.setAttribute('content', content)
-      }
+    // Dynamic pages handle their own metadata and schema with API-backed content.
+    if (location.pathname.startsWith('/blog/') || location.pathname.startsWith('/guia-local/')) {
+      return
     }
 
-    setMeta('meta[name="description"]', pageMeta.description)
-    setMeta('meta[property="og:title"]', pageMeta.title)
-    setMeta('meta[property="og:description"]', pageMeta.description)
-    setMeta('meta[property="og:url"]', canonicalUrl)
-    setMeta('meta[name="twitter:title"]', pageMeta.title)
-    setMeta('meta[name="twitter:description"]', pageMeta.description)
-
-    const canonicalElement = document.querySelector('link[rel="canonical"]')
-    if (canonicalElement) {
-      canonicalElement.setAttribute('href', canonicalUrl)
-    }
+    clearDynamicJsonLd(['breadcrumb', 'blog-posting', 'local-business', 'faq'])
+    applySeo({
+      title: pageMeta.title,
+      description: pageMeta.description,
+      path: location.pathname,
+      imageUrl: `${SITE_URL}/favicon.png`,
+    })
   }, [location.pathname, t.siteName, language])
 
   return (

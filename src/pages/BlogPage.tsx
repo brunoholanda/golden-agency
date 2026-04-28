@@ -1,23 +1,28 @@
-import { Alert, Card, Col, Row, Spin, Tag, Typography } from 'antd'
+import { Alert, Card, Col, Pagination, Row, Spin, Tag, Typography } from 'antd'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { fetchBlogPosts, type BlogListItem } from '../api/publicContent'
+import { Link, useSearchParams } from 'react-router-dom'
+import { fetchBlogPosts, type BlogListItem, type PaginatedResponse } from '../api/publicContent'
 import { PageSection, PageSectionTitle } from '../components/PageSection'
 import { publicAssetUrl } from '../util/publicAssetUrl'
 
 const { Paragraph } = Typography
+const PAGE_SIZE = 10
 
 type T = { blogTitle: string; blogDesc: string }
 
 export function BlogPage({ t }: { t: T }) {
-  const [items, setItems] = useState<BlogListItem[] | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const currentPage = Math.max(1, Number(searchParams.get('page') || '1') || 1)
+  const [result, setResult] = useState<PaginatedResponse<BlogListItem> | null>(null)
   const [err, setErr] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
-    fetchBlogPosts()
+    setErr(null)
+    setResult(null)
+    fetchBlogPosts(currentPage, PAGE_SIZE)
       .then((data) => {
-        if (!cancelled) setItems(data)
+        if (!cancelled) setResult(data)
       })
       .catch(() => {
         if (!cancelled) setErr('Não foi possível carregar as publicações.')
@@ -25,20 +30,32 @@ export function BlogPage({ t }: { t: T }) {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [currentPage])
+
+  const setPage = (page: number) => {
+    const next = new URLSearchParams(searchParams)
+    if (page <= 1) next.delete('page')
+    else next.set('page', String(page))
+    setSearchParams(next, { replace: true })
+  }
+
+  const items = result?.items ?? []
+  const total = result?.total ?? 0
 
   return (
     <PageSection>
-      <PageSectionTitle level={2}>{t.blogTitle}</PageSectionTitle>
+      <PageSectionTitle level={1} className="ga-post-title">
+        {t.blogTitle}
+      </PageSectionTitle>
       <Paragraph>{t.blogDesc}</Paragraph>
       {err && <Alert type="error" message={err} style={{ marginTop: 16 }} showIcon />}
-      {items === null && <Spin style={{ display: 'block', marginTop: 24 }} />}
-      {items && items.length === 0 && (
+      {result === null && <Spin style={{ display: 'block', marginTop: 24 }} />}
+      {result && items.length === 0 && (
         <Paragraph type="secondary" style={{ marginTop: 16 }}>
           Ainda não há artigos publicados.
         </Paragraph>
       )}
-      {items && items.length > 0 && (
+      {result && items.length > 0 && (
         <div style={{ marginTop: 16, display: 'grid', gap: 16 }}>
           {items.map((post) => (
             <Card key={post.id} style={{ width: '100%' }} styles={{ body: { padding: 16 } }}>
@@ -47,18 +64,18 @@ export function BlogPage({ t }: { t: T }) {
                   <Link to={`/blog/${post.slug}`}>
                     <img
                       src={publicAssetUrl(post.imageUrl)}
-                      alt=""
+                      alt={`Imagem de capa do artigo ${post.title}`}
                       style={{ width: '100%', borderRadius: 12, display: 'block', objectFit: 'cover', maxHeight: 160 }}
                     />
                   </Link>
                 </Col>
                 <Col xs={24} sm={16} md={18}>
                   <Link to={`/blog/${post.slug}`} style={{ color: 'inherit' }}>
-                    <Typography.Title level={4} style={{ marginTop: 0 }}>
+                    <Typography.Title level={4} className="ga-post-title" style={{ marginTop: 0 }}>
                       {post.title}
                     </Typography.Title>
                   </Link>
-                  <Paragraph type="secondary" ellipsis={{ rows: 3 }}>
+                  <Paragraph type="secondary" className="ga-post-body" ellipsis={{ rows: 3 }}>
                     {post.excerpt}
                   </Paragraph>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -70,6 +87,17 @@ export function BlogPage({ t }: { t: T }) {
               </Row>
             </Card>
           ))}
+          {total > PAGE_SIZE && (
+            <Pagination
+              current={currentPage}
+              pageSize={PAGE_SIZE}
+              total={total}
+              onChange={setPage}
+              showSizeChanger={false}
+              align="center"
+              style={{ marginTop: 8 }}
+            />
+          )}
         </div>
       )}
     </PageSection>

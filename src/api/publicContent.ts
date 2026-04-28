@@ -43,9 +43,41 @@ export type LocalBusinessItem = {
   createdAt: string
 }
 
-export async function fetchBlogPosts(): Promise<BlogListItem[]> {
-  const { data } = await http.get<BlogListItem[]>('/blog')
-  return data
+export type PaginatedResponse<T> = {
+  items: T[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
+function normalizePaginatedResponse<T>(data: PaginatedResponse<T> | T[], page: number, limit: number): PaginatedResponse<T> {
+  if (Array.isArray(data)) {
+    const total = data.length
+    return {
+      items: data,
+      total,
+      page,
+      limit,
+      totalPages: total > 0 ? Math.ceil(total / limit) : 1,
+    }
+  }
+
+  return {
+    items: data.items ?? [],
+    total: typeof data.total === 'number' ? data.total : (data.items?.length ?? 0),
+    page: typeof data.page === 'number' ? data.page : page,
+    limit: typeof data.limit === 'number' ? data.limit : limit,
+    totalPages:
+      typeof data.totalPages === 'number'
+        ? data.totalPages
+        : Math.max(1, Math.ceil((typeof data.total === 'number' ? data.total : data.items?.length ?? 0) / limit)),
+  }
+}
+
+export async function fetchBlogPosts(page = 1, limit = 10): Promise<PaginatedResponse<BlogListItem>> {
+  const { data } = await http.get<PaginatedResponse<BlogListItem> | BlogListItem[]>('/blog', { params: { page, limit } })
+  return normalizePaginatedResponse(data, page, limit)
 }
 
 export async function fetchBlogPost(slug: string): Promise<BlogDetail> {
@@ -58,10 +90,14 @@ export async function fetchBlogHeadlines(limit = 2): Promise<BlogHeadlineItem[]>
   return data
 }
 
-export async function fetchLocalBusinesses(category?: string): Promise<LocalBusinessItem[]> {
-  const params = category ? { category } : undefined
-  const { data } = await http.get<LocalBusinessItem[]>('/local-guide', { params })
-  return data
+export async function fetchLocalBusinesses(
+  category?: string,
+  page = 1,
+  limit = 10,
+): Promise<PaginatedResponse<LocalBusinessItem>> {
+  const params = { page, limit, ...(category ? { category } : {}) }
+  const { data } = await http.get<PaginatedResponse<LocalBusinessItem> | LocalBusinessItem[]>('/local-guide', { params })
+  return normalizePaginatedResponse(data, page, limit)
 }
 
 export async function fetchLocalBusinessCategories(): Promise<string[]> {

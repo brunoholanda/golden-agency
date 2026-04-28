@@ -1,15 +1,18 @@
 import {
   ArrowLeftOutlined,
   EnvironmentOutlined,
+  FacebookFilled,
   FacebookOutlined,
   GlobalOutlined,
+  InstagramFilled,
   InstagramOutlined,
   MailOutlined,
   PhoneOutlined,
   TagsOutlined,
+  WhatsAppOutlined,
   YoutubeOutlined,
 } from '@ant-design/icons'
-import { Alert, Button, Descriptions, Space, Spin, Typography } from 'antd'
+import { Alert, Button, Descriptions, Space, Spin, Typography, message } from 'antd'
 import { type CSSProperties, useEffect, useState } from 'react'
 import type { Components } from 'react-markdown'
 import ReactMarkdown from 'react-markdown'
@@ -18,9 +21,18 @@ import remarkGfm from 'remark-gfm'
 import { getAdminToken } from '../api/http'
 import { fetchLocalBusiness, type LocalBusinessItem } from '../api/publicContent'
 import { PageSection } from '../components/PageSection'
+import {
+  applySeo,
+  clearDynamicJsonLd,
+  extractFaqFromMarkdown,
+  setBreadcrumbSchema,
+  setFaqSchema,
+  setLocalBusinessSchema,
+} from '../seo/seo'
 import { publicAssetUrl } from '../util/publicAssetUrl'
 
 const { Title, Paragraph } = Typography
+const SITE_URL = 'https://www.goldenagencia.com'
 
 const infoLabelStyle: CSSProperties = {
   display: 'inline-flex',
@@ -72,6 +84,7 @@ export function LocalBusinessPage({
   const [row, setRow] = useState<LocalBusinessItem | null>(null)
   const [loading, setLoading] = useState(true)
   const [err, setErr] = useState<string | null>(null)
+  const [messageApi, contextHolder] = message.useMessage()
 
   useEffect(() => {
     let cancelled = false
@@ -82,7 +95,36 @@ export function LocalBusinessPage({
       .then((data) => {
         if (!cancelled) {
           setRow(data)
-          document.title = `${data.title} | ${siteName}`
+          const canonicalPath = `/guia-local/${data.id}`
+          const description = data.description.replace(/[#*_`[\]]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 158)
+          const imageUrl = publicAssetUrl(data.imageUrl)
+
+          applySeo({
+            title: `${data.title} | ${siteName}`,
+            description,
+            path: canonicalPath,
+            imageUrl,
+          })
+          setBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: backLabel, path: '/guia-local' },
+            { name: data.title, path: canonicalPath },
+          ])
+          setLocalBusinessSchema({
+            path: canonicalPath,
+            name: data.title,
+            description,
+            imageUrl,
+            telephone: data.contact,
+            address: data.location,
+            email: data.email,
+            website: data.site,
+            category: data.category,
+            socialLinks: [data.instagram, data.facebook, data.youtube]
+              .filter(Boolean)
+              .map((value) => String(value)),
+          })
+          setFaqSchema(extractFaqFromMarkdown(data.description))
         }
       })
       .catch(() => {
@@ -92,14 +134,38 @@ export function LocalBusinessPage({
         if (!cancelled) setLoading(false)
       })
     return () => {
+      clearDynamicJsonLd(['breadcrumb', 'local-business', 'faq'])
       cancelled = true
     }
-  }, [id, siteName])
+  }, [id, siteName, backLabel])
 
   const showEdit = Boolean(row && getAdminToken())
+  const shareUrl = row ? `${SITE_URL}/guia-local/${row.id}` : ''
+  const shareText = row ? `Confira este negócio no Guia Local: ${row.title}` : ''
+  const facebookShareHref = row
+    ? `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`
+    : '#'
+  const whatsappShareHref = row
+    ? `https://wa.me/?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`
+    : '#'
+  const emailShareHref = row
+    ? `mailto:?subject=${encodeURIComponent(row.title)}&body=${encodeURIComponent(`${shareText}\n\n${shareUrl}`)}`
+    : '#'
+
+  const handleInstagramShare = async () => {
+    if (!row) return
+    try {
+      await navigator.clipboard.writeText(shareUrl)
+      messageApi.success('Link copiado. Abra o Instagram e cole no post/story.')
+    } catch {
+      messageApi.info('Não foi possível copiar automaticamente. Copie a URL da página para compartilhar no Instagram.')
+    }
+    window.open('https://www.instagram.com/', '_blank', 'noopener,noreferrer')
+  }
 
   return (
     <PageSection>
+      {contextHolder}
       <Space wrap align="center" style={{ marginBottom: 12 }}>
         <Link to="/guia-local" style={{ lineHeight: 1 }}>
           <Button
@@ -132,13 +198,32 @@ export function LocalBusinessPage({
         <>
           <img
             src={publicAssetUrl(row.imageUrl)}
-            alt=""
+            alt={`Imagem do negócio ${row.title}`}
             style={{ width: '100%', height: 'auto', objectFit: 'contain', borderRadius: 12, marginBottom: 16 }}
           />
-          <Title level={2} style={{ marginTop: 0 }}>
+          <Title level={1} className="ga-post-title" style={{ marginTop: 0 }}>
             {row.title}
           </Title>
-          <div className="ga-markdown">
+          <div style={{ marginBottom: 16 }}>
+            <Typography.Text strong style={{ display: 'block', marginBottom: 8 }}>
+              Compartilhar negócio
+            </Typography.Text>
+            <Space wrap>
+              <Button icon={<FacebookFilled />} href={facebookShareHref} target="_blank" rel="noreferrer">
+                Facebook
+              </Button>
+              <Button icon={<WhatsAppOutlined />} href={whatsappShareHref} target="_blank" rel="noreferrer">
+                WhatsApp
+              </Button>
+              <Button icon={<MailOutlined />} href={emailShareHref}>
+                E-mail
+              </Button>
+              <Button icon={<InstagramFilled />} onClick={handleInstagramShare}>
+                Instagram
+              </Button>
+            </Space>
+          </div>
+          <div className="ga-markdown ga-post-body">
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>
               {row.description}
             </ReactMarkdown>
