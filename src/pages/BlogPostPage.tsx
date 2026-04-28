@@ -1,3 +1,4 @@
+import { ArrowLeftOutlined } from '@ant-design/icons'
 import { Alert, Button, Space, Spin, Tag, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import type { Components } from 'react-markdown'
@@ -63,9 +64,21 @@ export function BlogPostPage({
 
   return (
     <PageSection>
-      <Space wrap align="center" style={{ marginBottom: 8 }}>
-        <Link to="/blog">
-          <Button type="link" style={{ paddingLeft: 0 }}>
+      <Space wrap align="center" style={{ marginBottom: 12 }}>
+        <Link to="/blog" style={{ lineHeight: 1 }}>
+          <Button
+            type="default"
+            icon={<ArrowLeftOutlined />}
+            aria-label={`Voltar para ${backLabel}`}
+            style={{
+              borderRadius: 10,
+              fontWeight: 600,
+              height: 40,
+              paddingInline: 16,
+              borderColor: 'rgba(16, 42, 67, 0.14)',
+              boxShadow: '0 1px 2px rgba(16, 42, 67, 0.06)',
+            }}
+          >
             {backLabel}
           </Button>
         </Link>
@@ -84,7 +97,13 @@ export function BlogPostPage({
           <img
             src={publicAssetUrl(post.imageUrl)}
             alt=""
-            style={{ width: '100%', maxHeight: 420, objectFit: 'cover', borderRadius: 12, marginBottom: 16 }}
+            style={{
+              width: '100%',
+              height: 'auto',
+              display: 'block',
+              borderRadius: 12,
+              marginBottom: 16,
+            }}
           />
           <Title level={2} style={{ marginTop: 0 }}>
             {post.title}
@@ -92,7 +111,7 @@ export function BlogPostPage({
           <Paragraph type="secondary">
             {new Date(post.createdAt).toLocaleDateString('pt-BR')}
           </Paragraph>
-          <div style={{ marginBottom: 16 }}>
+          <div style={{ marginBottom: 16, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {post.tags.map((tag) => (
               <Tag key={tag}>{tag}</Tag>
             ))}

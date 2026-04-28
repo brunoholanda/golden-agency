@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, SaveOutlined, UploadOutlined } from '@ant-design/icons'
 import MDEditor from '@uiw/react-md-editor'
 import '@uiw/react-md-editor/markdown-editor.css'
-import { Button, Divider, Flex, Input, Select, Space, Spin, Switch, Typography, Upload, message } from 'antd'
+import { App, Button, Divider, Flex, Input, Select, Space, Spin, Switch, Typography, Upload } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -15,6 +15,7 @@ import { publicAssetUrl } from '../util/publicAssetUrl'
 import { AdminFieldLabel, AdminPageHeader, AdminPanelCard } from './AdminPageChrome'
 
 export function AdminBlogEditor() {
+  const { message } = App.useApp()
   const { id } = useParams()
   const navigate = useNavigate()
   const isCreate = !id

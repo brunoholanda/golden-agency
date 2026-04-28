@@ -1,4 +1,4 @@
-import { Alert, Card, Col, List, Row, Spin, Tag, Typography } from 'antd'
+import { Alert, Card, Col, Row, Spin, Tag, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { fetchBlogPosts, type BlogListItem } from '../api/publicContent'
@@ -39,42 +39,38 @@ export function BlogPage({ t }: { t: T }) {
         </Paragraph>
       )}
       {items && items.length > 0 && (
-        <List
-          style={{ marginTop: 16 }}
-          dataSource={items}
-          renderItem={(post) => (
-            <List.Item key={post.id}>
-              <Card style={{ width: '100%' }} styles={{ body: { padding: 16 } }}>
-                <Row gutter={[16, 16]} align="middle">
-                  <Col xs={24} sm={8} md={6}>
-                    <Link to={`/blog/${post.slug}`}>
-                      <img
-                        src={publicAssetUrl(post.imageUrl)}
-                        alt=""
-                        style={{ width: '100%', borderRadius: 12, display: 'block', objectFit: 'cover', maxHeight: 160 }}
-                      />
-                    </Link>
-                  </Col>
-                  <Col xs={24} sm={16} md={18}>
-                    <Link to={`/blog/${post.slug}`} style={{ color: 'inherit' }}>
-                      <Typography.Title level={4} style={{ marginTop: 0 }}>
-                        {post.title}
-                      </Typography.Title>
-                    </Link>
-                    <Paragraph type="secondary" ellipsis={{ rows: 3 }}>
-                      {post.excerpt}
-                    </Paragraph>
-                    <div>
-                      {post.tags.map((tag) => (
-                        <Tag key={tag}>{tag}</Tag>
-                      ))}
-                    </div>
-                  </Col>
-                </Row>
-              </Card>
-            </List.Item>
-          )}
-        />
+        <div style={{ marginTop: 16, display: 'grid', gap: 16 }}>
+          {items.map((post) => (
+            <Card key={post.id} style={{ width: '100%' }} styles={{ body: { padding: 16 } }}>
+              <Row gutter={[16, 16]} align="middle">
+                <Col xs={24} sm={8} md={6}>
+                  <Link to={`/blog/${post.slug}`}>
+                    <img
+                      src={publicAssetUrl(post.imageUrl)}
+                      alt=""
+                      style={{ width: '100%', borderRadius: 12, display: 'block', objectFit: 'cover', maxHeight: 160 }}
+                    />
+                  </Link>
+                </Col>
+                <Col xs={24} sm={16} md={18}>
+                  <Link to={`/blog/${post.slug}`} style={{ color: 'inherit' }}>
+                    <Typography.Title level={4} style={{ marginTop: 0 }}>
+                      {post.title}
+                    </Typography.Title>
+                  </Link>
+                  <Paragraph type="secondary" ellipsis={{ rows: 3 }}>
+                    {post.excerpt}
+                  </Paragraph>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    {post.tags.map((tag) => (
+                      <Tag key={tag}>{tag}</Tag>
+                    ))}
+                  </div>
+                </Col>
+              </Row>
+            </Card>
+          ))}
+        </div>
       )}
     </PageSection>
   )

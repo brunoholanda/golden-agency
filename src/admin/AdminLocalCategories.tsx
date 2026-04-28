@@ -1,5 +1,5 @@
 import { EditOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Flex, Form, Input, Modal, Space, Table, Typography, message } from 'antd'
+import { App, Button, Flex, Form, Input, Modal, Space, Table, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import {
   adminCreateLocalCategory,
@@ -10,6 +10,7 @@ import {
 import { AdminPageHeader, AdminPanelCard } from './AdminPageChrome'
 
 export function AdminLocalCategories() {
+  const { message } = App.useApp()
   const [rows, setRows] = useState<AdminLocalCategory[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -130,7 +131,7 @@ export function AdminLocalCategories() {
         confirmLoading={saving}
         onOk={() => void save()}
         onCancel={() => setModalOpen(false)}
-        destroyOnClose
+        destroyOnHidden
       >
         <Form form={form} layout="vertical">
           <Form.Item

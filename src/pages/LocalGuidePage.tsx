@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Grid, List, Select, Space, Spin, Typography } from 'antd'
+import { Alert, Button, Card, Col, Grid, Row, Select, Space, Spin, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { fetchLocalBusinessCategories, fetchLocalBusinesses, type LocalBusinessItem } from '../api/publicContent'
@@ -62,7 +62,7 @@ export function LocalGuidePage({ t }: { t: T }) {
       <PageSectionTitle level={2}>{t.localGuideTitle}</PageSectionTitle>
       <Paragraph>{t.localGuideDesc}</Paragraph>
       {isMobile ? (
-        <Space direction="vertical" size={4} style={{ marginTop: 8 }}>
+        <Space orientation="vertical" size={4} style={{ marginTop: 8 }}>
           <Typography.Text strong>Filtrar por categoria</Typography.Text>
           <Select
             allowClear
@@ -74,7 +74,7 @@ export function LocalGuidePage({ t }: { t: T }) {
           />
         </Space>
       ) : (
-        <Space direction="vertical" size={8} style={{ marginTop: 8, width: '100%' }}>
+        <Space orientation="vertical" size={8} style={{ marginTop: 8, width: '100%' }}>
           <Typography.Text strong>Categorias</Typography.Text>
           <Space wrap size={[8, 8]}>
             <Button type={selectedCategory ? 'default' : 'primary'} onClick={() => setCategoryFilter(undefined)}>
@@ -96,12 +96,9 @@ export function LocalGuidePage({ t }: { t: T }) {
         </Paragraph>
       )}
       {items && items.length > 0 && (
-        <List
-          style={{ marginTop: 16 }}
-          grid={{ gutter: 16, xs: 1, sm: 1, md: 2, lg: 2, xl: 2 }}
-          dataSource={items}
-          renderItem={(biz) => (
-            <List.Item key={biz.id}>
+        <Row style={{ marginTop: 16 }} gutter={[16, 16]}>
+          {items.map((biz) => (
+            <Col xs={24} md={12} key={biz.id}>
               <Card
                 hoverable
                 cover={
@@ -109,7 +106,7 @@ export function LocalGuidePage({ t }: { t: T }) {
                     <img
                       alt=""
                       src={publicAssetUrl(biz.imageUrl)}
-                      style={{ height: 220, objectFit: 'cover', width: '100%' }}
+                      style={{ height: 260, objectFit: 'cover', width: '100%' }}
                     />
                   </Link>
                 }
@@ -123,9 +120,9 @@ export function LocalGuidePage({ t }: { t: T }) {
                   {biz.description.replace(/[#*_`[\]]/g, ' ').replace(/\s+/g, ' ').trim()}
                 </Paragraph>
               </Card>
-            </List.Item>
-          )}
-        />
+            </Col>
+          ))}
+        </Row>
       )}
     </PageSection>
   )

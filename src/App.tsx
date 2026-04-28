@@ -12,9 +12,10 @@ import {
 } from '@ant-design/icons'
 import { Button, Card, Col, Drawer, Layout, Row, Segmented, Space, Tag, Typography } from 'antd'
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react'
-import { NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import styled from 'styled-components'
+import { Link, NavLink, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import styled, { css, keyframes } from 'styled-components'
 import { AdminRoutes } from './admin/AdminRoutes'
+import { fetchBlogHeadlines, type BlogHeadlineItem } from './api/publicContent'
 import { privacyPolicyEn, privacyPolicyPtBR } from './content/privacyPolicy'
 import { BlogPage } from './pages/BlogPage'
 import { BlogPostPage } from './pages/BlogPostPage'
@@ -235,6 +236,7 @@ const translations = {
     blogTitle: 'Blog',
     blogDesc:
       'Conteúdo prático para brasileiros nos Estados Unidos: guias, documentos, prazos e dicas para facilitar sua rotina.',
+    headerBlogFeedLabel: 'Últimas do blog',
     localGuideTitle: 'Guia Local',
     localGuideDesc:
       'Indicações de serviços e parceiros que podem apoiar você e sua família na região.',
@@ -495,6 +497,7 @@ const translations = {
     blogTitle: 'Blog',
     blogDesc:
       'Practical content for Brazilians in the U.S.: guides, documents, deadlines, and tips to simplify your routine.',
+    headerBlogFeedLabel: 'Latest from the blog',
     localGuideTitle: 'Local Guide',
     localGuideDesc:
       'Recommendations for trusted services and partners that can support you and your family in the region.',
@@ -671,7 +674,7 @@ function HomePage({ t }: { t: Translations }) {
   return (
     <PageStack>
       <HeroSection>
-        <Space direction="vertical" size="middle">
+        <Space orientation="vertical" size="middle">
           <Tag color="blue">{t.remoteTag}</Tag>
           <HeroTitle level={1}>{t.heroTitle}</HeroTitle>
           <HeroDescription>{t.heroDesc}</HeroDescription>
@@ -779,7 +782,7 @@ function PricingPage({ t }: { t: Translations }) {
             <PricingBoard>
               <Title level={4}>{board.title}</Title>
               <Paragraph>{board.description}</Paragraph>
-              <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+              <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
                 {board.sections.map((section) => (
                   <PricingSection key={section.title}>
                     <Text strong>{section.title}</Text>
@@ -922,6 +925,48 @@ function ScrollToTop() {
   return null
 }
 
+function HeaderBlogTicker({ t }: { t: Translations }) {
+  const [items, setItems] = useState<BlogHeadlineItem[]>([])
+
+  useEffect(() => {
+    let cancelled = false
+    fetchBlogHeadlines(3)
+      .then((data) => {
+        if (!cancelled) {
+          setItems(data)
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setItems([])
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  if (items.length === 0) return null
+  const loopItems = items.length > 1 ? [...items, ...items] : items
+
+  return (
+    <TopNewsBar aria-label={t.headerBlogFeedLabel}>
+      <TopNewsInner>
+        <TopNewsLabel>{t.headerBlogFeedLabel}</TopNewsLabel>
+        <TopNewsViewport>
+          <TopNewsTrack $animate={items.length > 1} $durationSeconds={Math.max(24, items.length * 7)}>
+            {loopItems.map((post, index) => (
+              <TopNewsItem key={`${post.id}-${index}`}>
+                <TopNewsLink to={`/blog/${post.slug}`}>{post.title}</TopNewsLink>
+                <TopNewsDivider aria-hidden>•</TopNewsDivider>
+              </TopNewsItem>
+            ))}
+          </TopNewsTrack>
+        </TopNewsViewport>
+      </TopNewsInner>
+    </TopNewsBar>
+  )
+}
+
 function AppLayout({ t, language, setLanguage }: { t: Translations; language: Language; setLanguage: (language: Language) => void }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
@@ -1030,6 +1075,7 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
 
   return (
     <PageLayout>
+      <HeaderBlogTicker t={t} />
       <TopHeader>
         <HeaderTopRow>
           <HeaderLeading>
@@ -1115,7 +1161,7 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
       <MobileDrawer
         title={t.siteName}
         placement="left"
-        width={360}
+        size={360}
         open={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         closable={{ 'aria-label': t.closeMenu }}
@@ -1160,7 +1206,7 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
             element={
               <BlogPostPage
                 siteName={t.siteName}
-                backLabel={`← ${t.nav.blog}`}
+                backLabel={t.nav.blog}
                 editInPanelLabel={t.editContentInPanel}
               />
             }
@@ -1172,7 +1218,7 @@ function AppLayout({ t, language, setLanguage }: { t: Translations; language: La
             element={
               <LocalBusinessPage
                 siteName={t.siteName}
-                backLabel={`← ${t.nav.localGuide}`}
+                backLabel={t.nav.localGuide}
                 editInPanelLabel={t.editContentInPanel}
               />
             }
@@ -1410,6 +1456,93 @@ const HeaderSubtitle = styled.p`
     -webkit-line-clamp: 2;
     overflow: hidden;
   }
+`
+
+const TopNewsBar = styled.div`
+  background: #081a2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  width: 100%;
+`
+
+const TopNewsInner = styled.div`
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 8px clamp(16px, 4vw, 48px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`
+
+const TopNewsLabel = styled.span`
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #e8a43d;
+  flex-shrink: 0;
+
+  @media (max-width: 900px) {
+    font-size: 0.68rem;
+  }
+`
+
+const TopNewsViewport = styled.div`
+  min-width: 0;
+  overflow: hidden;
+  flex: 1 1 auto;
+`
+
+const slideTicker = keyframes`
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+`
+
+const TopNewsTrack = styled.div<{ $animate: boolean; $durationSeconds: number }>`
+  display: inline-flex;
+  align-items: center;
+  width: max-content;
+  gap: 24px;
+  will-change: transform;
+  animation: ${({ $animate, $durationSeconds }) =>
+    $animate
+      ? css`
+          ${slideTicker} ${$durationSeconds}s linear infinite
+        `
+      : 'none'};
+
+  &:hover {
+    animation-play-state: paused;
+  }
+`
+
+const TopNewsItem = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  white-space: nowrap;
+`
+
+const TopNewsLink = styled(Link)`
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.88rem;
+  line-height: 1.2;
+  opacity: 0.95;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+`
+
+const TopNewsDivider = styled.span`
+  opacity: 0.45;
 `
 
 const NavList = styled.ul`

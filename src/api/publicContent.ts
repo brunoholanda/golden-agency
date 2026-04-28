@@ -20,6 +20,13 @@ export type BlogDetail = {
   createdAt: string
 }
 
+export type BlogHeadlineItem = {
+  id: string
+  title: string
+  slug: string
+  createdAt: string
+}
+
 export type LocalBusinessItem = {
   id: string
   title: string
@@ -43,6 +50,11 @@ export async function fetchBlogPosts(): Promise<BlogListItem[]> {
 
 export async function fetchBlogPost(slug: string): Promise<BlogDetail> {
   const { data } = await http.get<BlogDetail>(`/blog/${encodeURIComponent(slug)}`)
+  return data
+}
+
+export async function fetchBlogHeadlines(limit = 2): Promise<BlogHeadlineItem[]> {
+  const { data } = await http.get<BlogHeadlineItem[]>('/blog/headlines', { params: { limit } })
   return data
 }
 

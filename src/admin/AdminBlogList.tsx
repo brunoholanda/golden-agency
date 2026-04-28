@@ -1,5 +1,5 @@
 import { EditOutlined, PlusOutlined } from '@ant-design/icons'
-import { Badge, Button, Popconfirm, Space, Table, Tag, Typography, message } from 'antd'
+import { App, Badge, Button, Popconfirm, Space, Table, Tag, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { adminDeleteBlog, adminListBlog, type AdminBlog } from '../api/adminApi'
@@ -7,6 +7,7 @@ import { publicAssetUrl } from '../util/publicAssetUrl'
 import { AdminPageHeader, AdminPanelCard } from './AdminPageChrome'
 
 export function AdminBlogList() {
+  const { message } = App.useApp()
   const navigate = useNavigate()
   const [rows, setRows] = useState<AdminBlog[]>([])
   const [loading, setLoading] = useState(true)

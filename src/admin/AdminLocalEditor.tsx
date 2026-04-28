@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, SaveOutlined, UploadOutlined } from '@ant-design/icons'
 import MDEditor from '@uiw/react-md-editor'
 import '@uiw/react-md-editor/markdown-editor.css'
-import { AutoComplete, Button, Divider, Flex, Input, Modal, Select, Space, Spin, Switch, Table, Typography, Upload, message } from 'antd'
+import { App, AutoComplete, Button, Divider, Flex, Input, Modal, Select, Space, Spin, Switch, Table, Typography, Upload } from 'antd'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -32,6 +32,7 @@ function formatUsPhone(value: string) {
 }
 
 export function AdminLocalEditor() {
+  const { message } = App.useApp()
   const { id } = useParams()
   const navigate = useNavigate()
   const isCreate = !id
@@ -342,7 +343,7 @@ export function AdminLocalEditor() {
           <Flex gap={16} wrap="wrap">
             <div style={{ flex: '1 1 240px', minWidth: 0 }}>
               <AdminFieldLabel>Categoria</AdminFieldLabel>
-              <Space direction="vertical" size={8} style={{ width: '100%' }}>
+              <Space orientation="vertical" size={8} style={{ width: '100%' }}>
               <Select
                 value={category || undefined}
                 options={categoryOptions.map((value) => ({ value: value.name, label: value.name }))}
@@ -501,9 +502,9 @@ export function AdminLocalEditor() {
         onCancel={() => setCategoriesModalOpen(false)}
         footer={null}
         width={760}
-        destroyOnClose
+        destroyOnHidden
       >
-        <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+        <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
           <Flex gap={10} wrap="wrap">
             <Input
               value={categoryNameInput}

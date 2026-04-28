@@ -1,4 +1,14 @@
-import { EnvironmentOutlined, FacebookOutlined, GlobalOutlined, InstagramOutlined, MailOutlined, PhoneOutlined, TagsOutlined, YoutubeOutlined } from '@ant-design/icons'
+import {
+  ArrowLeftOutlined,
+  EnvironmentOutlined,
+  FacebookOutlined,
+  GlobalOutlined,
+  InstagramOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  TagsOutlined,
+  YoutubeOutlined,
+} from '@ant-design/icons'
 import { Alert, Button, Descriptions, Space, Spin, Typography } from 'antd'
 import { type CSSProperties, useEffect, useState } from 'react'
 import type { Components } from 'react-markdown'
@@ -90,9 +100,21 @@ export function LocalBusinessPage({
 
   return (
     <PageSection>
-      <Space wrap align="center" style={{ marginBottom: 8 }}>
-        <Link to="/guia-local">
-          <Button type="link" style={{ paddingLeft: 0 }}>
+      <Space wrap align="center" style={{ marginBottom: 12 }}>
+        <Link to="/guia-local" style={{ lineHeight: 1 }}>
+          <Button
+            type="default"
+            icon={<ArrowLeftOutlined />}
+            aria-label={`Voltar para ${backLabel}`}
+            style={{
+              borderRadius: 10,
+              fontWeight: 600,
+              height: 40,
+              paddingInline: 16,
+              borderColor: 'rgba(16, 42, 67, 0.14)',
+              boxShadow: '0 1px 2px rgba(16, 42, 67, 0.06)',
+            }}
+          >
             {backLabel}
           </Button>
         </Link>

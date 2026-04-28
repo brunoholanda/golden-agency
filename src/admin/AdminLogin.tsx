@@ -1,5 +1,5 @@
 import { CodeOutlined, LockOutlined } from '@ant-design/icons'
-import { Button, Card, Form, Input, Space, Typography, message } from 'antd'
+import { App, Button, Card, Form, Input, Space, Typography } from 'antd'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { adminLogin } from '../api/adminApi'
@@ -9,6 +9,7 @@ const GOLD = '#d4a017'
 const PAGE_BG = 'linear-gradient(165deg, #faf8f3 0%, #f4f0e8 42%, #ebe4d6 100%)'
 
 export function AdminLogin() {
+  const { message } = App.useApp()
   const navigate = useNavigate()
   const location = useLocation()
   const from = (location.state as { from?: string } | null)?.from || '/admin/painel'
@@ -31,7 +32,7 @@ export function AdminLogin() {
       }}
     >
       <div style={{ width: '100%', maxWidth: 420 }}>
-        <Space direction="vertical" size={28} style={{ width: '100%' }}>
+        <Space orientation="vertical" size={28} style={{ width: '100%' }}>
           <div style={{ textAlign: 'center' }}>
             <Typography.Title level={2} style={{ marginBottom: 4, fontWeight: 700, letterSpacing: '-0.02em' }}>
               Golden Agência
@@ -49,7 +50,7 @@ export function AdminLogin() {
             }}
             styles={{ body: { padding: '28px 24px 24px' } }}
           >
-            <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+            <Space orientation="vertical" size="middle" style={{ width: '100%' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <span
                   style={{

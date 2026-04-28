@@ -59,7 +59,7 @@ export function AdminImageCropModal({
       cancelText="Cancelar"
       confirmLoading={saving}
       width={860}
-      destroyOnClose
+      destroyOnHidden
     >
       <Typography.Paragraph type="secondary" style={{ marginBottom: 10 }}>
         Proporção fixa otimizada (800x445), ideal para capa com bom visual e carregamento rápido.
@@ -87,7 +87,7 @@ export function AdminImageCropModal({
           />
         ) : null}
       </div>
-      <Space direction="vertical" style={{ marginTop: 14, width: '100%' }} size={4}>
+      <Space orientation="vertical" style={{ marginTop: 14, width: '100%' }} size={4}>
         <Typography.Text strong>Zoom</Typography.Text>
         <Slider min={1} max={3} step={0.01} value={zoom} onChange={setZoom} />
       </Space>
